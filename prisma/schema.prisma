@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  STUDENT
+  ADMIN
+}
+
+enum MaterialStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String?
+  role         UserRole  @default(STUDENT)
+  avatarUrl    String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  materials Material[]
+  reviews   Review[]
+  downloads DownloadLog[]
+  accounts  Account[]
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Subject {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  code        String?  @unique
+  description String?
+  college     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  materials Material[]
+
+  @@index([name])
+}
+
+model Material {
+  id            String         @id @default(uuid())
+  title         String
+  description   String?
+  subjectId     String
+  subject       Subject        @relation(fields: [subjectId], references: [id])
+  semester      String?
+  fileUrl       String
+  fileName      String
+  fileSize      Int
+  fileType      String
+  status        MaterialStatus @default(PENDING)
+  downloadCount Int            @default(0)
+  uploaderId    String
+  uploader      User           @relation(fields: [uploaderId], references: [id])
+
+  reviews   Review[]
+  downloads DownloadLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([subjectId, status])
+  @@index([status])
+  @@index([uploaderId])
+  @@index([createdAt])
+}
+
+model Review {
+  id         String         @id @default(uuid())
+  materialId String
+  material   Material       @relation(fields: [materialId], references: [id])
+  reviewerId String
+  reviewer   User           @relation(fields: [reviewerId], references: [id])
+  status     MaterialStatus
+  comment    String?
+  createdAt  DateTime       @default(now())
+
+  @@index([materialId])
+}
+
+model DownloadLog {
+  id           String   @id @default(uuid())
+  materialId   String
+  material     Material @relation(fields: [materialId], references: [id])
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  downloadedAt DateTime @default(now())
+
+  @@index([materialId])
+  @@index([userId])
+}
