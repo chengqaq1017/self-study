@@ -2,9 +2,10 @@ import { promises as fs, createReadStream } from "fs";
 import crypto from "crypto";
 import path from "path";
 
-const STORAGE_ROOT = process.env.VERCEL
-  ? path.join("/tmp", "storage")
-  : path.join(process.cwd(), "storage");
+const STORAGE_ROOT = process.env.STORAGE_ROOT
+  ?? (process.env.VERCEL
+    ? path.join("/tmp", "storage")
+    : path.join(process.cwd(), "storage"));
 
 export interface FileMetadata {
   fileKey: string;
