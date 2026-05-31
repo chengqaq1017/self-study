@@ -52,23 +52,23 @@ export default async function MaterialsPage({
       <h1 className="text-2xl font-bold text-gray-900">资料库</h1>
 
       {/* Filters */}
-      <form className="flex flex-wrap items-end gap-3">
-        <div>
+      <form className="grid grid-cols-1 gap-3 rounded-lg border bg-white p-3 shadow-sm sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end">
+        <div className="min-w-0 lg:w-64">
           <label className="block text-xs text-gray-500">搜索</label>
           <input
             type="text"
             name="q"
             defaultValue={q}
             placeholder="搜索资料标题..."
-            className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none lg:py-1.5"
           />
         </div>
-        <div>
+        <div className="min-w-0 lg:w-56">
           <label className="block text-xs text-gray-500">科目</label>
           <select
             name="subjectId"
             defaultValue={subjectId}
-            className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none lg:py-1.5"
           >
             <option value="">全部科目</option>
             {subjects.map((s) => (
@@ -78,12 +78,12 @@ export default async function MaterialsPage({
             ))}
           </select>
         </div>
-        <div>
+        <div className="min-w-0 lg:w-36">
           <label className="block text-xs text-gray-500">排序</label>
           <select
             name="sort"
             defaultValue={sort}
-            className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none lg:py-1.5"
           >
             <option value="latest">最新上传</option>
             <option value="popular">最多下载</option>
@@ -91,7 +91,7 @@ export default async function MaterialsPage({
         </div>
         <button
           type="submit"
-          className="rounded-md bg-primary px-4 py-1.5 text-sm text-white hover:bg-primary-light"
+          className="rounded-md bg-primary px-4 py-2 text-white hover:bg-primary-light sm:self-end lg:py-1.5"
         >
           筛选
         </button>
@@ -107,7 +107,7 @@ export default async function MaterialsPage({
           <p className="text-sm text-gray-500">
             共 {total} 份资料
           </p>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
             {materials.map((m) => (
               <MaterialCard key={m.id} material={m} />
             ))}
@@ -115,11 +115,11 @@ export default async function MaterialsPage({
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-3">
               {page > 1 && (
                 <Link
                   href={`/materials?page=${page - 1}${subjectId ? `&subjectId=${subjectId}` : ""}${q ? `&q=${q}` : ""}&sort=${sort}`}
-                  className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50"
+                  className="rounded-md border bg-white px-4 py-2 text-sm hover:bg-gray-50"
                 >
                   上一页
                 </Link>
@@ -130,7 +130,7 @@ export default async function MaterialsPage({
               {page < totalPages && (
                 <Link
                   href={`/materials?page=${page + 1}${subjectId ? `&subjectId=${subjectId}` : ""}${q ? `&q=${q}` : ""}&sort=${sort}`}
-                  className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50"
+                  className="rounded-md border bg-white px-4 py-2 text-sm hover:bg-gray-50"
                 >
                   下一页
                 </Link>

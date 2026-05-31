@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
 import { Upload, FileText, X } from "lucide-react";
+import { DEFAULT_COLLEGE, WHUT_COLLEGES } from "@/lib/colleges";
 
 interface Subject {
   id: string;
@@ -12,9 +13,13 @@ interface Subject {
 
 export function UploadForm({ subjects }: { subjects: Subject[] }) {
   const router = useRouter();
+  const [subjectOptions, setSubjectOptions] = useState(subjects);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [subjectId, setSubjectId] = useState("");
+  const [isAddingSubject, setIsAddingSubject] = useState(false);
+  const [newSubjectName, setNewSubjectName] = useState("");
+  const [newSubjectCollege, setNewSubjectCollege] = useState(DEFAULT_COLLEGE);
   const [semester, setSemester] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -45,6 +50,40 @@ export function UploadForm({ subjects }: { subjects: Subject[] }) {
     setUploading(true);
 
     try {
+      let finalSubjectId = subjectId;
+      if (isAddingSubject) {
+        const subjectName = newSubjectName.trim();
+        if (!subjectName) {
+          throw new Error("请输入科目名称");
+        }
+        if (!newSubjectCollege) {
+          throw new Error("请选择所属学院");
+        }
+
+        const subjectRes = await fetch("/api/subjects", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: subjectName, college: newSubjectCollege }),
+        });
+
+        if (!subjectRes.ok) {
+          const data = await subjectRes.json();
+          throw new Error(data.error ?? "创建科目失败");
+        }
+
+        const subject = (await subjectRes.json()) as Subject;
+        finalSubjectId = subject.id;
+        setSubjectOptions((current) =>
+          current.some((item) => item.id === subject.id)
+            ? current
+            : [...current, subject].sort((a, b) => a.name.localeCompare(b.name, "zh-CN"))
+        );
+      }
+
+      if (!finalSubjectId) {
+        throw new Error("请选择科目");
+      }
+
       // Step 1: 上传文件
       const formData = new FormData();
       formData.append("file", file);
@@ -68,7 +107,7 @@ export function UploadForm({ subjects }: { subjects: Subject[] }) {
         body: JSON.stringify({
           title,
           description: description || undefined,
-          subjectId,
+          subjectId: finalSubjectId,
           semester: semester || undefined,
           fileName: uploadData.fileName,
           fileUrl: uploadData.fileKey,
@@ -86,6 +125,9 @@ export function UploadForm({ subjects }: { subjects: Subject[] }) {
       setTitle("");
       setDescription("");
       setSubjectId("");
+      setIsAddingSubject(false);
+      setNewSubjectName("");
+      setNewSubjectCollege(DEFAULT_COLLEGE);
       setSemester("");
       setFile(null);
 
@@ -128,19 +170,66 @@ export function UploadForm({ subjects }: { subjects: Subject[] }) {
         <label className="block text-sm font-medium text-gray-700">
           科目 <span className="text-red-500">*</span>
         </label>
-        <select
-          required
-          value={subjectId}
-          onChange={(e) => setSubjectId(e.target.value)}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-        >
-          <option value="">请选择科目</option>
-          {subjects.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
+        <div className="mt-1 grid grid-cols-2 gap-2 rounded-md bg-gray-100 p-1 text-sm">
+          <button
+            type="button"
+            onClick={() => setIsAddingSubject(false)}
+            className={`rounded px-3 py-2 font-medium ${
+              isAddingSubject ? "text-gray-600" : "bg-white text-primary shadow-sm"
+            }`}
+          >
+            选择已有科目
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsAddingSubject(true)}
+            className={`rounded px-3 py-2 font-medium ${
+              isAddingSubject ? "bg-white text-primary shadow-sm" : "text-gray-600"
+            }`}
+          >
+            新增科目
+          </button>
+        </div>
+
+        {isAddingSubject ? (
+          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+            <input
+              type="text"
+              required
+              value={newSubjectName}
+              onChange={(e) => setNewSubjectName(e.target.value)}
+              className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              placeholder="例如：高等数学A（上）"
+            />
+            <select
+              required
+              value={newSubjectCollege}
+              onChange={(e) => setNewSubjectCollege(e.target.value)}
+              className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            >
+              <option value="">请选择学院</option>
+              {WHUT_COLLEGES.map((college) => (
+                <option key={college} value={college}>
+                  {college}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <select
+            required
+            value={subjectId}
+            onChange={(e) => setSubjectId(e.target.value)}
+            className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          >
+            <option value="">请选择科目</option>
+            {subjectOptions.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       <div>
@@ -175,7 +264,7 @@ export function UploadForm({ subjects }: { subjects: Subject[] }) {
         </label>
         <div
           {...getRootProps()}
-          className={`mt-1 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors ${
+          className={`mt-1 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-5 transition-colors sm:p-8 ${
             isDragActive
               ? "border-blue-400 bg-blue-50"
               : "border-gray-300 hover:border-gray-400"
@@ -183,10 +272,10 @@ export function UploadForm({ subjects }: { subjects: Subject[] }) {
         >
           <input {...getInputProps()} />
           {file ? (
-            <div className="flex items-center gap-2 text-sm text-gray-700">
+            <div className="flex max-w-full flex-wrap items-center justify-center gap-2 text-sm text-gray-700">
               <FileText className="h-5 w-5 text-primary" />
-              <span>{file.name}</span>
-              <span className="text-gray-400">
+              <span className="max-w-full truncate">{file.name}</span>
+              <span className="whitespace-nowrap text-gray-400">
                 ({(file.size / 1024 / 1024).toFixed(1)} MB)
               </span>
               <button

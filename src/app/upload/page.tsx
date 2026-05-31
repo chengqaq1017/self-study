@@ -16,8 +16,8 @@ export default async function UploadPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">上传资料</h1>
-      <div className="rounded-lg border bg-white p-6 shadow-sm">
+      <h1 className="mb-4 text-2xl font-bold text-gray-900 sm:mb-6">上传资料</h1>
+      <div className="rounded-lg border bg-white p-4 shadow-sm sm:p-6">
         <UploadForm subjects={subjects} />
       </div>
     </div>

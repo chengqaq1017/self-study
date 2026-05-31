@@ -59,10 +59,10 @@ export default async function MaterialDetailPage({
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div className="rounded-lg border bg-white p-6 shadow-sm">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">
+      <div className="rounded-lg border bg-white p-4 shadow-sm sm:p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <h1 className="break-words text-xl font-bold text-gray-900">
               {material.title}
             </h1>
             <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-500">
@@ -79,7 +79,7 @@ export default async function MaterialDetailPage({
             </div>
           </div>
           <span
-            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadge.color}`}
+            className={`inline-flex w-fit items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadge.color}`}
           >
             {statusBadge.text}
           </span>

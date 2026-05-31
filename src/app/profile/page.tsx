@@ -54,23 +54,23 @@ export default async function ProfilePage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       {/* User Info */}
-      <div className="rounded-lg border bg-white p-6 shadow-sm">
+      <div className="rounded-lg border bg-white p-4 shadow-sm sm:p-6">
         <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-2xl font-bold text-primary">
+          <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-2xl font-bold text-primary sm:h-16 sm:w-16">
             {(user.name ?? user.email).charAt(0).toUpperCase()}
           </div>
-          <div>
+          <div className="min-w-0">
             <h1 className="text-xl font-bold text-gray-900">
               {user.name ?? "未设置姓名"}
             </h1>
-            <p className="text-sm text-gray-500">{user.email}</p>
+            <p className="truncate text-sm text-gray-500">{user.email}</p>
             <p className="text-xs text-gray-400">
               {user.role === "ADMIN" ? "管理员" : "学生"} · 注册于{" "}
               {formatDate(user.createdAt)}
             </p>
           </div>
         </div>
-        <div className="mt-6 grid grid-cols-3 gap-4 text-center">
+        <div className="mt-6 grid grid-cols-1 gap-3 text-center sm:grid-cols-3 sm:gap-4">
           <div className="rounded-md bg-gray-50 p-3">
             <p className="text-2xl font-bold text-primary">
               {user._count.materials}
@@ -106,12 +106,12 @@ export default async function ProfilePage() {
               return (
                 <div
                   key={m.id}
-                  className="flex items-center justify-between rounded-lg border bg-white p-4"
+                  className="flex flex-col gap-3 rounded-lg border bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="min-w-0 flex-1">
                     <a
                       href={`/materials/${m.id}`}
-                      className="font-medium text-gray-900 hover:text-primary"
+                    className="break-words font-medium text-gray-900 hover:text-primary"
                     >
                       {m.title}
                     </a>
@@ -121,7 +121,7 @@ export default async function ProfilePage() {
                     </p>
                   </div>
                   <span
-                    className={`ml-3 rounded-full px-2.5 py-0.5 text-xs ${badge.color}`}
+                    className={`w-fit rounded-full px-2.5 py-0.5 text-xs sm:ml-3 ${badge.color}`}
                   >
                     {badge.text}
                   </span>

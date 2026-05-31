@@ -20,8 +20,8 @@ export function ReviewActionModal({
   const [comment, setComment] = useState("");
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+    <div className="modal-fade fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-3 sm:items-center">
+      <div className="modal-panel w-full max-w-md rounded-lg bg-white p-5 shadow-xl sm:p-6">
         <h3 className="text-lg font-semibold text-gray-900">
           {action}资料
         </h3>
@@ -42,18 +42,18 @@ export function ReviewActionModal({
           />
         </div>
 
-        <div className="mt-6 flex justify-end gap-3">
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:justify-end">
           <button
             onClick={onCancel}
             disabled={processing}
-            className="rounded-md border px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+            className="rounded-md border px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 sm:py-2"
           >
             取消
           </button>
           <button
             onClick={() => onConfirm(comment || undefined)}
             disabled={processing}
-            className={`rounded-md px-4 py-2 text-sm text-white ${
+            className={`rounded-md px-4 py-2.5 text-sm text-white sm:py-2 ${
               action === "通过"
                 ? "bg-green-500 hover:bg-green-600"
                 : "bg-red-500 hover:bg-red-600"

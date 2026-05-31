@@ -32,18 +32,18 @@ export function MaterialCard({ material }: MaterialCardProps) {
           <FileText className="h-5 w-5 text-primary" />
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="font-medium text-gray-900 truncate">
+          <h3 className="truncate font-medium text-gray-900">
             {material.title}
           </h3>
           {material.semester && (
             <p className="text-xs text-gray-400">{material.semester}</p>
           )}
-          <div className="mt-2 flex items-center gap-3 text-xs text-gray-400">
-            <span className="flex items-center gap-1">
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
+            <span className="flex items-center gap-1 whitespace-nowrap">
               <Download className="h-3 w-3" />
               {material.downloadCount}
             </span>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 whitespace-nowrap">
               <Clock className="h-3 w-3" />
               {formatDate(material.createdAt)}
             </span>

@@ -13,9 +13,9 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex gap-6">
+    <div className="space-y-4 lg:flex lg:gap-6 lg:space-y-0">
       <AdminSidebar />
-      <div className="flex-1">{children}</div>
+      <div className="min-w-0 flex-1">{children}</div>
     </div>
   );
 }

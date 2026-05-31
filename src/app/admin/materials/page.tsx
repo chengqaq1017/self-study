@@ -11,9 +11,56 @@ export default async function AdminMaterialsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">资料管理</h1>
+      <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">资料管理</h1>
 
-      <div className="overflow-hidden rounded-lg border bg-white">
+      <div className="space-y-3 md:hidden">
+        {materials.map((m) => (
+          <div key={m.id} className="rounded-lg border bg-white p-4 shadow-sm">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <a
+                  href={`/materials/${m.id}`}
+                  className="line-clamp-2 font-medium text-primary"
+                >
+                  {m.title}
+                </a>
+                <p className="mt-1 text-sm text-gray-500">{m.subject.name}</p>
+              </div>
+              <span
+                className={`flex-shrink-0 rounded-full px-2 py-1 text-xs ${
+                  m.status === "APPROVED"
+                    ? "bg-green-100 text-green-700"
+                    : m.status === "PENDING"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : "bg-red-100 text-red-700"
+                }`}
+              >
+                {m.status === "APPROVED"
+                  ? "已通过"
+                  : m.status === "PENDING"
+                    ? "待审核"
+                    : "已拒绝"}
+              </span>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-gray-500">
+              <div>
+                <span className="block text-gray-400">上传者</span>
+                <span className="truncate">{m.uploader?.name ?? m.uploader?.email ?? "—"}</span>
+              </div>
+              <div>
+                <span className="block text-gray-400">下载</span>
+                <span>{m.downloadCount}</span>
+              </div>
+              <div>
+                <span className="block text-gray-400">时间</span>
+                <span>{new Intl.DateTimeFormat("zh-CN").format(m.createdAt)}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden overflow-hidden rounded-lg border bg-white md:block">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-left text-gray-500">
             <tr>

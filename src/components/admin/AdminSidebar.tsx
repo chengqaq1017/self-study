@@ -15,28 +15,30 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 flex-shrink-0">
-      <nav className="rounded-lg border bg-white p-3">
-        <div className="mb-3 px-3 py-2 text-sm font-semibold text-gray-500">
+    <aside className="lg:w-56 lg:flex-shrink-0">
+      <nav className="rounded-lg border bg-white p-2 shadow-sm lg:p-3">
+        <div className="hidden px-3 py-2 text-sm font-semibold text-gray-500 lg:mb-3 lg:block">
           管理后台
         </div>
-        {links.map((link) => {
-          const isActive = pathname === link.href;
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                isActive
-                  ? "bg-blue-50 font-medium text-primary"
-                  : "text-gray-600 hover:bg-gray-50"
-              }`}
-            >
-              <link.icon className="h-4 w-4" />
-              {link.label}
-            </Link>
-          );
-        })}
+        <div className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1 lg:mx-0 lg:block lg:space-y-1 lg:overflow-visible lg:px-0 lg:pb-0">
+          {links.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`flex min-w-max items-center justify-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors lg:justify-start ${
+                  isActive
+                    ? "bg-blue-50 font-medium text-primary"
+                    : "text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                <link.icon className="h-4 w-4 flex-shrink-0" />
+                <span>{link.label}</span>
+              </Link>
+            );
+          })}
+        </div>
       </nav>
     </aside>
   );

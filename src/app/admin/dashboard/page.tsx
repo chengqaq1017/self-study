@@ -29,18 +29,18 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">管理仪表盘</h1>
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+      <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">管理仪表盘</h1>
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-lg border bg-white p-6 shadow-sm"
+            className="rounded-lg border bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6"
           >
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">{stat.label}</p>
-              <stat.icon className={`h-5 w-5 ${stat.color}`} />
+              <stat.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${stat.color}`} />
             </div>
-            <p className="mt-2 text-3xl font-bold text-gray-900">
+            <p className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">
               {stat.value}
             </p>
           </div>

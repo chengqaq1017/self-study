@@ -8,17 +8,17 @@ export async function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-white shadow-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-        <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary">
-          <BookOpen className="h-6 w-6" />
-          <span>武理工自习室</span>
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <Link href="/" className="flex min-w-0 items-center gap-2 text-lg font-bold text-primary sm:text-xl">
+          <BookOpen className="h-6 w-6 flex-shrink-0" />
+          <span className="truncate">武理资料共享平台</span>
         </Link>
 
-        <div className="flex items-center gap-4">
-          <Link href="/subjects" className="text-sm text-gray-600 hover:text-primary">
+        <div className="-mx-1 flex w-full items-center gap-3 overflow-x-auto px-1 pb-1 text-sm sm:mx-0 sm:w-auto sm:gap-4 sm:overflow-visible sm:pb-0">
+          <Link href="/subjects" className="whitespace-nowrap text-gray-600 hover:text-primary">
             科目分类
           </Link>
-          <Link href="/materials" className="text-sm text-gray-600 hover:text-primary">
+          <Link href="/materials" className="whitespace-nowrap text-gray-600 hover:text-primary">
             资料库
           </Link>
 
@@ -26,7 +26,7 @@ export async function Navbar() {
             <>
               <Link
                 href="/upload"
-                className="flex items-center gap-1 text-sm text-gray-600 hover:text-primary"
+                className="flex items-center gap-1 whitespace-nowrap text-gray-600 hover:text-primary"
               >
                 <Upload className="h-4 w-4" />
                 上传
@@ -34,19 +34,19 @@ export async function Navbar() {
               {user.role === "ADMIN" && (
                 <Link
                   href="/admin/dashboard"
-                  className="flex items-center gap-1 text-sm text-orange-600 hover:text-orange-700"
+                  className="flex items-center gap-1 whitespace-nowrap text-orange-600 hover:text-orange-700"
                 >
                   <Shield className="h-4 w-4" />
                   管理
                 </Link>
               )}
-              <div className="flex items-center gap-2 border-l pl-4">
+              <div className="flex min-w-0 items-center gap-2 border-l pl-3 sm:pl-4">
                 <Link
                   href="/profile"
-                  className="flex items-center gap-1 text-sm text-gray-600 hover:text-primary"
+                  className="flex min-w-0 items-center gap-1 text-gray-600 hover:text-primary"
                 >
-                  <User className="h-4 w-4" />
-                  {user.name ?? user.email}
+                  <User className="h-4 w-4 flex-shrink-0" />
+                  <span className="max-w-28 truncate sm:max-w-40">{user.name ?? user.email}</span>
                 </Link>
                 <form
                   action={async () => {
@@ -56,7 +56,7 @@ export async function Navbar() {
                 >
                   <button
                     type="submit"
-                    className="flex items-center gap-1 text-sm text-gray-400 hover:text-red-500"
+                    className="flex items-center gap-1 text-gray-400 hover:text-red-500"
                     title="退出"
                   >
                     <LogOut className="h-4 w-4" />
@@ -68,13 +68,13 @@ export async function Navbar() {
             <div className="flex items-center gap-3">
               <Link
                 href="/login"
-                className="text-sm text-gray-600 hover:text-primary"
+                className="whitespace-nowrap text-gray-600 hover:text-primary"
               >
                 登录
               </Link>
               <Link
                 href="/register"
-                className="rounded-md bg-primary px-4 py-1.5 text-sm text-white hover:bg-primary-light"
+                className="whitespace-nowrap rounded-md bg-primary px-4 py-1.5 text-white hover:bg-primary-light"
               >
                 注册
               </Link>

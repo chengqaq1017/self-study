@@ -25,17 +25,17 @@ export default async function AdminReviewsPage({
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">资料审核</h1>
+      <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">资料审核</h1>
 
-      <div className="flex gap-3">
+      <div className="grid grid-cols-3 gap-2 rounded-lg bg-gray-100 p-1 text-center text-sm sm:inline-grid sm:w-auto">
         {(["PENDING", "APPROVED", "REJECTED"] as const).map((s) => (
           <a
             key={s}
             href={`/admin/reviews?status=${s}`}
-            className={`rounded-md px-4 py-1.5 text-sm font-medium ${
+            className={`rounded-md px-3 py-2 font-medium ${
               status === s
-                ? "bg-primary text-white"
-                : "border bg-white text-gray-600 hover:bg-gray-50"
+                ? "bg-white text-primary shadow-sm"
+                : "text-gray-600 hover:bg-white/70"
             }`}
           >
             {{ PENDING: "待审核", APPROVED: "已通过", REJECTED: "已拒绝" }[s]}

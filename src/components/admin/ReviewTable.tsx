@@ -70,7 +70,82 @@ export function ReviewTable({ materials }: { materials: MaterialItem[] }) {
 
   return (
     <>
-      <div className="overflow-hidden rounded-lg border bg-white">
+      <div className="space-y-3 md:hidden">
+        {materials.map((m) => (
+          <div key={m.id} className="rounded-lg border bg-white p-4 shadow-sm">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <a
+                  href={`/materials/${m.id}`}
+                  className="line-clamp-2 font-medium text-primary"
+                >
+                  {m.title}
+                </a>
+                <p className="mt-1 text-sm text-gray-500">{m.subject.name}</p>
+              </div>
+              <span className="flex-shrink-0 rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-500">
+                {formatSize(m.fileSize)}
+              </span>
+            </div>
+
+            <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-gray-500">
+              <div>
+                <span className="block text-gray-400">上传者</span>
+                <span className="truncate">{m.uploader?.name ?? m.uploader?.email ?? "—"}</span>
+              </div>
+              <div>
+                <span className="block text-gray-400">时间</span>
+                <span>{formatDate(m.createdAt)}</span>
+              </div>
+              <div>
+                <span className="block text-gray-400">学期</span>
+                <span>{m.semester ?? "—"}</span>
+              </div>
+              <div>
+                <span className="block text-gray-400">最后审核</span>
+                <span>{m.reviews[0]?.reviewer?.name ?? "—"}</span>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              {m.status === "PENDING" ? (
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      setSelectedMaterial(m);
+                      setAction("APPROVED");
+                    }}
+                    className="rounded-md bg-green-500 px-3 py-2 text-sm text-white hover:bg-green-600"
+                  >
+                    通过
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSelectedMaterial(m);
+                      setAction("REJECTED");
+                    }}
+                    className="rounded-md bg-red-500 px-3 py-2 text-sm text-white hover:bg-red-600"
+                  >
+                    拒绝
+                  </button>
+                </div>
+              ) : m.reviews[0] ? (
+                <span
+                  className={`text-sm ${
+                    m.reviews[0].status === "APPROVED"
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {m.reviews[0].status === "APPROVED" ? "已通过" : "已拒绝"}
+                </span>
+              ) : null}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden overflow-hidden rounded-lg border bg-white md:block">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-left text-gray-500">
             <tr>
