@@ -39,13 +39,6 @@ npm run dev
 
 访问 http://localhost:3000
 
-### 默认账号
-
-| 角色 | 邮箱 | 密码 |
-|---|---|---|
-| 管理员 | admin@wut.edu.cn | admin123 |
-| 测试学生 | student@example.com | 123456 |
-
 ## 项目结构
 
 ```
