@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
-import { BookOpen, Upload, User, LogOut, Shield } from "lucide-react";
+import { LogOut, Shield, Upload, User } from "lucide-react";
 
 export async function Navbar() {
   const session = await auth();
@@ -9,14 +9,18 @@ export async function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b bg-white shadow-sm">
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <Link href="/" className="flex min-w-0 items-center gap-2 text-lg font-bold text-primary sm:text-xl">
-          <BookOpen className="h-6 w-6 flex-shrink-0" />
-          <span className="truncate">武理资料共享平台</span>
+        <Link href="/" className="flex min-w-0 items-center gap-2">
+          <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+            船
+          </span>
+          <span className="truncate text-base font-bold text-primary sm:text-lg">
+            船海能动资料共享
+          </span>
         </Link>
 
         <div className="-mx-1 flex w-full items-center gap-3 overflow-x-auto px-1 pb-1 text-sm sm:mx-0 sm:w-auto sm:gap-4 sm:overflow-visible sm:pb-0">
           <Link href="/subjects" className="whitespace-nowrap text-gray-600 hover:text-primary">
-            科目分类
+            课程
           </Link>
           <Link href="/materials" className="whitespace-nowrap text-gray-600 hover:text-primary">
             资料库
@@ -57,7 +61,7 @@ export async function Navbar() {
                   <button
                     type="submit"
                     className="flex items-center gap-1 text-gray-400 hover:text-red-500"
-                    title="退出"
+                    title="退出登录"
                   >
                     <LogOut className="h-4 w-4" />
                   </button>
@@ -66,10 +70,7 @@ export async function Navbar() {
             </>
           ) : (
             <div className="flex items-center gap-3">
-              <Link
-                href="/login"
-                className="whitespace-nowrap text-gray-600 hover:text-primary"
-              >
+              <Link href="/login" className="whitespace-nowrap text-gray-600 hover:text-primary">
                 登录
               </Link>
               <Link

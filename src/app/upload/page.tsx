@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { sortSubjectsByPinyin } from "@/lib/subjects";
 import { UploadForm } from "@/components/materials/UploadForm";
 
 export default async function UploadPage() {
@@ -9,10 +10,11 @@ export default async function UploadPage() {
     redirect("/login?callbackUrl=/upload");
   }
 
-  const subjects = await prisma.subject.findMany({
-    orderBy: { name: "asc" },
-    select: { id: true, name: true },
-  });
+  const subjects = sortSubjectsByPinyin(
+    await prisma.subject.findMany({
+      select: { id: true, name: true },
+    })
+  );
 
   return (
     <div className="mx-auto max-w-2xl">

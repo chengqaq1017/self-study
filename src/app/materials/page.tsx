@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { MaterialCard } from "@/components/materials/MaterialCard";
+import { SubjectCombobox } from "@/components/subjects/SubjectCombobox";
+import { sortSubjectsByPinyin } from "@/lib/subjects";
 
 export default async function MaterialsPage({
   searchParams,
@@ -11,13 +13,13 @@ export default async function MaterialsPage({
   const page = parseInt(sp.page ?? "1", 10);
   const limit = 20;
   const subjectId = sp.subjectId;
-  const semester = sp.semester;
+  const year = sp.year;
   const q = sp.q;
   const sort = sp.sort ?? "latest";
 
   const where: Record<string, unknown> = { status: "APPROVED" };
   if (subjectId) where.subjectId = subjectId;
-  if (semester) where.semester = semester;
+  if (year) where.semester = year;
   if (q) {
     where.OR = [
       { title: { contains: q, mode: "insensitive" } },
@@ -26,9 +28,7 @@ export default async function MaterialsPage({
   }
 
   const orderBy =
-    sort === "popular"
-      ? { downloadCount: "desc" as const }
-      : { createdAt: "desc" as const };
+    sort === "popular" ? { downloadCount: "desc" as const } : { createdAt: "desc" as const };
 
   const [materials, total, subjects] = await Promise.all([
     prisma.material.findMany({
@@ -42,16 +42,25 @@ export default async function MaterialsPage({
       },
     }),
     prisma.material.count({ where }),
-    prisma.subject.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.subject.findMany({ select: { id: true, name: true } }).then(sortSubjectsByPinyin),
   ]);
 
+  const selectedSubject = subjects.find((subject) => subject.id === subjectId);
   const totalPages = Math.ceil(total / limit);
+  const pageQuery = (nextPage: number) => {
+    const params = new URLSearchParams();
+    params.set("page", String(nextPage));
+    if (subjectId) params.set("subjectId", subjectId);
+    if (year) params.set("year", year);
+    if (q) params.set("q", q);
+    params.set("sort", sort);
+    return `/materials?${params.toString()}`;
+  };
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-gray-900">资料库</h1>
 
-      {/* Filters */}
       <form className="grid grid-cols-1 gap-3 rounded-lg border bg-white p-3 shadow-sm sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end">
         <div className="min-w-0 lg:w-64">
           <label className="block text-xs text-gray-500">搜索</label>
@@ -59,24 +68,28 @@ export default async function MaterialsPage({
             type="text"
             name="q"
             defaultValue={q}
-            placeholder="搜索资料标题..."
+            placeholder="搜索标题或描述"
             className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none lg:py-1.5"
           />
         </div>
-        <div className="min-w-0 lg:w-56">
-          <label className="block text-xs text-gray-500">科目</label>
-          <select
-            name="subjectId"
-            defaultValue={subjectId}
+        <div className="min-w-0 lg:w-64">
+          <label className="block text-xs text-gray-500">课程</label>
+          <SubjectCombobox
+            subjects={subjects}
+            value={subjectId}
+            inputValue={selectedSubject?.name ?? ""}
+            placeholder="输入课程名筛选"
+          />
+        </div>
+        <div className="min-w-0 lg:w-32">
+          <label className="block text-xs text-gray-500">年份</label>
+          <input
+            type="text"
+            name="year"
+            defaultValue={year}
+            placeholder="2025"
             className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none lg:py-1.5"
-          >
-            <option value="">全部科目</option>
-            {subjects.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         <div className="min-w-0 lg:w-36">
           <label className="block text-xs text-gray-500">排序</label>
@@ -97,30 +110,23 @@ export default async function MaterialsPage({
         </button>
       </form>
 
-      {/* Results */}
       {materials.length === 0 ? (
         <div className="rounded-lg border bg-white p-12 text-center text-gray-400">
-          未找到相关资料
+          暂未找到相关资料
         </div>
       ) : (
         <>
-          <p className="text-sm text-gray-500">
-            共 {total} 份资料
-          </p>
+          <p className="text-sm text-gray-500">共 {total} 份资料</p>
           <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {materials.map((m) => (
-              <MaterialCard key={m.id} material={m} />
+            {materials.map((material) => (
+              <MaterialCard key={material.id} material={material} />
             ))}
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-3">
               {page > 1 && (
-                <Link
-                  href={`/materials?page=${page - 1}${subjectId ? `&subjectId=${subjectId}` : ""}${q ? `&q=${q}` : ""}&sort=${sort}`}
-                  className="rounded-md border bg-white px-4 py-2 text-sm hover:bg-gray-50"
-                >
+                <Link href={pageQuery(page - 1)} className="rounded-md border bg-white px-4 py-2 text-sm hover:bg-gray-50">
                   上一页
                 </Link>
               )}
@@ -128,10 +134,7 @@ export default async function MaterialsPage({
                 {page} / {totalPages}
               </span>
               {page < totalPages && (
-                <Link
-                  href={`/materials?page=${page + 1}${subjectId ? `&subjectId=${subjectId}` : ""}${q ? `&q=${q}` : ""}&sort=${sort}`}
-                  className="rounded-md border bg-white px-4 py-2 text-sm hover:bg-gray-50"
-                >
+                <Link href={pageQuery(page + 1)} className="rounded-md border bg-white px-4 py-2 text-sm hover:bg-gray-50">
                   下一页
                 </Link>
               )}

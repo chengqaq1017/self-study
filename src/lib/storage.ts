@@ -2,10 +2,9 @@ import { promises as fs, createReadStream } from "fs";
 import crypto from "crypto";
 import path from "path";
 
-const STORAGE_ROOT = process.env.STORAGE_ROOT
-  ?? (process.env.VERCEL
-    ? path.join("/tmp", "storage")
-    : path.join(process.cwd(), "storage"));
+const STORAGE_ROOT =
+  process.env.STORAGE_ROOT ??
+  (process.env.VERCEL ? path.join("/tmp", "storage") : path.join(process.cwd(), "storage"));
 
 export interface FileMetadata {
   fileKey: string;
@@ -55,7 +54,7 @@ class LocalDiskStorage implements StorageProvider {
     try {
       await fs.unlink(filePath);
     } catch {
-      // 文件可能已被删除
+      // The file may already have been removed.
     }
   }
 
@@ -71,7 +70,6 @@ class LocalDiskStorage implements StorageProvider {
 
   getReadableStream(fileKey: string): Promise<ReadableStream> {
     const filePath = path.join(this.materialsDir, fileKey);
-    // Node ReadStream -> Web ReadableStream
     const stream = createReadStream(filePath);
     return Promise.resolve(stream as unknown as ReadableStream);
   }
@@ -86,7 +84,6 @@ export function getStorage(): StorageProvider {
   return storageInstance;
 }
 
-// 文件类型白名单
 export const ALLOWED_MIME_TYPES = [
   "application/pdf",
   "application/msword",
@@ -103,10 +100,20 @@ export const ALLOWED_MIME_TYPES = [
 ];
 
 export const ALLOWED_EXTENSIONS = [
-  ".pdf", ".doc", ".docx", ".ppt", ".pptx",
-  ".zip", ".rar", ".7z",
-  ".png", ".jpg", ".jpeg", ".webp",
+  ".pdf",
+  ".doc",
+  ".docx",
+  ".ppt",
+  ".pptx",
+  ".zip",
+  ".rar",
+  ".7z",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
   ".txt",
 ];
 
-export const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE_MB ?? "50", 10) * 1024 * 1024;
+export const MAX_FILE_SIZE =
+  parseInt(process.env.MAX_FILE_SIZE_MB ?? "50", 10) * 1024 * 1024;

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Download } from "lucide-react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { Download } from "lucide-react";
 
 export function DownloadButton({
   materialId,
@@ -39,7 +39,6 @@ export function DownloadButton({
         throw new Error(data.error ?? "下载失败");
       }
 
-      // 创建 blob 并触发下载
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -59,6 +58,7 @@ export function DownloadButton({
   return (
     <div>
       <button
+        type="button"
         onClick={handleDownload}
         disabled={loading}
         className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2.5 text-white hover:bg-primary-light disabled:opacity-50"

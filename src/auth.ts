@@ -19,8 +19,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const email = credentials.email as string;
-        const password = credentials.password as string;
+        const email = String(credentials.email).trim().toLowerCase();
+        const password = String(credentials.password);
 
         const user = await prisma.user.findUnique({
           where: { email },
@@ -46,7 +46,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
       },
     }),
-    // 后续此处接入智慧理工大 OAuth
   ],
   callbacks: {
     async jwt({ token, user, trigger, session }) {
@@ -55,7 +54,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.role = (user as { role?: string }).role ?? "STUDENT";
       }
       if (trigger === "update" && session) {
-        token = { ...token, ...session };
+        token.name = session.name ?? token.name;
+        token.email = session.email ?? token.email;
       }
       return token;
     },
@@ -63,6 +63,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = (token.role as string) ?? "STUDENT";
+        session.user.name = token.name;
+        session.user.email = token.email ?? "";
       }
       return session;
     },

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
-const STORAGE_KEY = "whut-study-welcome-hidden-until";
+const STORAGE_KEY = "naoep-study-welcome-hidden-until";
 const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
 
 export function WelcomeModal() {
@@ -11,10 +11,14 @@ export function WelcomeModal() {
   const [hideForSevenDays, setHideForSevenDays] = useState(false);
 
   useEffect(() => {
-    const hiddenUntil = Number(window.localStorage.getItem(STORAGE_KEY) ?? 0);
-    if (!hiddenUntil || Date.now() > hiddenUntil) {
-      setOpen(true);
-    }
+    const timer = window.setTimeout(() => {
+      const hiddenUntil = Number(window.localStorage.getItem(STORAGE_KEY) ?? 0);
+      if (!hiddenUntil || Date.now() > hiddenUntil) {
+        setOpen(true);
+      }
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   function close() {
@@ -31,11 +35,9 @@ export function WelcomeModal() {
       <div className="modal-panel w-full max-w-lg rounded-lg bg-white p-5 shadow-xl sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              欢迎使用武理资料共享平台
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-900">公告</h2>
             <p className="mt-1 text-sm text-gray-500">
-              本网站免费为武汉理工大学学生提供复习资料共享服务。
+              船海与能源动力工程学院课程资料库已按 2024 版培养方案重新整理。
             </p>
           </div>
           <button
@@ -49,20 +51,15 @@ export function WelcomeModal() {
         </div>
 
         <div className="mt-5 space-y-4 text-sm leading-6 text-gray-600">
-          <div>
-            <p className="font-medium text-gray-900">使用方法</p>
-            <p className="mt-1">
-              可以在资料库按关键词、科目和学期搜索资料；也可以登录后上传自己的复习资料。新上传的资料会先进入审核，通过后公开给同学下载。
-            </p>
-          </div>
-
+          <p>
+            平台现在只收录船舶与海洋工程、轮机工程、能源与动力工程（船舶）相关课程资料。上传时可以一次选择多个文件，并用单个年份标注资料来源。
+          </p>
+          <p>
+            个人中心已支持修改姓名、邮箱和密码。资料仍需审核后公开，请上传与课程学习直接相关的内容。
+          </p>
           <div>
             <p className="font-medium text-gray-900">联系与反馈</p>
-            <p className="mt-1">邮箱：364672@whut.edu.cn</p>
-            <p>QQ：2782881499</p>
-            <p className="mt-1">
-              欢迎大家提出在使用网站时遇到的问题和改进建议。
-            </p>
+            <p className="mt-1">邮箱：364672@whut.wdu.cn</p>
           </div>
         </div>
 

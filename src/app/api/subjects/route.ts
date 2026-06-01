@@ -1,26 +1,24 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
-import { WHUT_COLLEGES } from "@/lib/colleges";
-import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { auth } from "@/auth";
+import { DEFAULT_COLLEGE, WHUT_COLLEGES } from "@/lib/colleges";
+import { prisma } from "@/lib/prisma";
+import { sortSubjectsByPinyin } from "@/lib/subjects";
 
 export async function GET() {
-  const subjects = await prisma.subject.findMany({
-    orderBy: { name: "asc" },
+  const subjects = sortSubjectsByPinyin(await prisma.subject.findMany({
     include: {
       _count: { select: { materials: { where: { status: "APPROVED" } } } },
     },
-  });
+  }));
   return NextResponse.json(subjects);
 }
 
 const createSubjectSchema = z.object({
-  name: z.string().trim().min(1, "请输入科目名称").max(80),
+  name: z.string().trim().min(1, "请输入课程名称").max(80),
   code: z.string().trim().max(40).optional(),
   description: z.string().trim().max(500).optional(),
-  college: z
-    .enum(WHUT_COLLEGES, { error: "请选择有效学院" })
-    .optional(),
+  college: z.enum(WHUT_COLLEGES, { error: "请选择有效学院" }).optional(),
 });
 
 export async function POST(request: Request) {
@@ -32,17 +30,14 @@ export async function POST(request: Request) {
   const body = await request.json();
   const parsed = createSubjectSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json(
-      { error: parsed.error.issues[0].message },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
   }
 
   const data = {
     name: parsed.data.name,
     code: parsed.data.code || undefined,
     description: parsed.data.description || undefined,
-    college: parsed.data.college || undefined,
+    college: parsed.data.college || DEFAULT_COLLEGE,
   };
 
   const existingSubject = await prisma.subject.findUnique({

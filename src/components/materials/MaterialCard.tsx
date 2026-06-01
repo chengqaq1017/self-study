@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Download, FileText, Clock } from "lucide-react";
+import { Clock, Download, FileText } from "lucide-react";
 
 interface MaterialCardProps {
   material: {
@@ -14,13 +14,12 @@ interface MaterialCardProps {
 }
 
 export function MaterialCard({ material }: MaterialCardProps) {
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("zh-CN", {
+  const formatDate = (date: Date) =>
+    new Intl.DateTimeFormat("zh-CN", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
     }).format(date);
-  };
 
   return (
     <Link
@@ -32,12 +31,8 @@ export function MaterialCard({ material }: MaterialCardProps) {
           <FileText className="h-5 w-5 text-primary" />
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-medium text-gray-900">
-            {material.title}
-          </h3>
-          {material.semester && (
-            <p className="text-xs text-gray-400">{material.semester}</p>
-          )}
+          <h3 className="truncate font-medium text-gray-900">{material.title}</h3>
+          {material.semester && <p className="text-xs text-gray-400">年份：{material.semester}</p>}
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
             <span className="flex items-center gap-1 whitespace-nowrap">
               <Download className="h-3 w-3" />
@@ -49,9 +44,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
             </span>
           </div>
           {material.uploader?.name && (
-            <p className="mt-1 text-xs text-gray-400">
-              上传：{material.uploader.name}
-            </p>
+            <p className="mt-1 text-xs text-gray-400">上传：{material.uploader.name}</p>
           )}
         </div>
       </div>

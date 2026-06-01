@@ -6,8 +6,12 @@ import { Footer } from "@/components/layout/Footer";
 import { WelcomeModal } from "@/components/WelcomeModal";
 
 export const metadata: Metadata = {
-  title: "武理资料共享平台",
-  description: "武汉理工大学笔记与考试资料分享平台",
+  title: "船海能动资料共享平台",
+  description: "武汉理工大学船海与能源动力工程学院课程资料共享平台",
+  icons: {
+    icon: "/whut-logo.svg",
+    shortcut: "/whut-logo.svg",
+  },
 };
 
 export default function RootLayout({
