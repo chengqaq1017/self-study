@@ -53,15 +53,6 @@ npm run dev
 
 访问 http://localhost:3000
 
-如需创建管理员账号，在运行 `npm run db:seed` 前设置：
-
-```bash
-SEED_ADMIN_EMAIL=your-admin@example.com
-SEED_ADMIN_PASSWORD=your-password
-```
-
-未设置上述变量时，种子脚本不会创建默认管理员账号。
-
 ## 数据范围
 
 课程目录依据武汉理工大学船海与能源动力工程学院官网 2025-06-05 发布的 2024 版本科培养方案整理，覆盖：
