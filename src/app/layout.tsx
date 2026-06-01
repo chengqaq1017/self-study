@@ -9,8 +9,20 @@ export const metadata: Metadata = {
   title: "船海能动资料共享平台",
   description: "武汉理工大学船海与能源动力工程学院课程资料共享平台",
   icons: {
-    icon: "/whut-logo.svg",
-    shortcut: "/whut-logo.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "船海能动资料平台",
+    statusBarStyle: "default",
   },
 };
 
