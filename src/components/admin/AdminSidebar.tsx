@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileCheck, BookOpen, FileText } from "lucide-react";
+import { LayoutDashboard, FileCheck, BookOpen, FileText, Users } from "lucide-react";
 
 const links = [
   { href: "/admin/dashboard", label: "仪表盘", icon: LayoutDashboard },
   { href: "/admin/reviews", label: "待审核", icon: FileCheck },
   { href: "/admin/materials", label: "资料管理", icon: FileText },
   { href: "/admin/subjects", label: "科目管理", icon: BookOpen },
+  { href: "/admin/users", label: "用户管理", icon: Users },
 ];
 
 export function AdminSidebar() {
