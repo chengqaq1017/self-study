@@ -14,18 +14,6 @@
   <img src="https://img.shields.io/badge/Next.js-16-black?style=flat&logo=next.js" alt="Next.js">
 </p>
 
-```
-    ☆ stargazers over time
-    
-  5 ┤                    ╭─☆
-  4 ┤              ╭──☆──╯
-  3 ┤        ╭──☆──╯
-  2 ┤  ╭──☆──╯
-  1 ┤─☆──╯
-  0 ┼────┬────┬────┬────┬────
-     now  +1d  +2d  +3d  +4d
-```
-
 武汉理工大学船海与能源动力工程学院课程资料共享平台，面向船舶与海洋工程、轮机工程、能源与动力工程（船舶）相关专业，支持按课程、关键词和年份查找资料。
 
 ## 技术栈
