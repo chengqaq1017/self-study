@@ -35,6 +35,12 @@ body {
   background-size: 28px 28px;
 }
 
+.hero-radar {
+  background:
+    linear-gradient(135deg, rgba(11, 79, 138, 0.94), rgba(15, 159, 143, 0.86)),
+    radial-gradient(circle at 76% 20%, rgba(255, 255, 255, 0.28), transparent 18rem);
+}
+
 /* ---- 页面进入动画 ---- */
 
 @keyframes page-fade-in {
