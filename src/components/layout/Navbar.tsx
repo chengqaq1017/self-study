@@ -9,7 +9,7 @@ export async function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-white/70 bg-white/82 shadow-sm shadow-slate-900/5 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-2.5 sm:gap-3 sm:overflow-visible sm:px-6 scrollbar-none">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-2.5 sm:gap-3 sm:px-6">
         <Link href="/" className="flex min-w-0 flex-shrink-0 items-center gap-2.5">
           <Image
             src="/icon-512.png"
@@ -19,7 +19,7 @@ export async function Navbar() {
             className="h-8 w-8 flex-shrink-0 rounded sm:h-9 sm:w-9"
             priority
           />
-          <span className="min-w-0">
+          <span className="hidden min-w-0 sm:block">
             <span className="block truncate text-sm font-bold text-ink sm:text-base">
               船海能动资料共享
             </span>
@@ -27,7 +27,7 @@ export async function Navbar() {
           </span>
         </Link>
 
-        <div className="flex min-w-0 flex-shrink-0 items-center gap-1 text-sm sm:justify-end sm:gap-2">
+        <div className="flex min-w-0 items-center gap-1 text-sm sm:justify-end sm:gap-2">
           <Link
             href="/subjects"
             className="flex-shrink-0 rounded-md px-2.5 py-1.5 text-slate-600 transition-colors hover:bg-primary/8 hover:text-primary sm:px-3"
