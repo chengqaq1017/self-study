@@ -8,9 +8,11 @@
 
 body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background: #f9fafb;
+  background: #f3f4f6;
   color: #111827;
 }
+
+/* ---- 页面进入动画 ---- */
 
 @keyframes page-fade-in {
   from {
@@ -24,12 +26,8 @@ body {
 }
 
 @keyframes modal-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes modal-panel-in {
@@ -55,15 +53,28 @@ body {
   animation: modal-panel-in 180ms ease-out both;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-  }
+/* ---- 卡片悬浮效果 ---- */
+
+.card-hover {
+  transition: box-shadow 150ms ease, transform 150ms ease;
 }
+.card-hover:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+/* ---- 优化焦点环 ---- */
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ---- 表单元素基础样式 ---- */
 
 input,
 select,
@@ -85,6 +96,16 @@ textarea {
     font-size: 14px;
   }
 }
- 
- 
- 
+
+/* ---- 动效偏好 ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
