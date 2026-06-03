@@ -6,7 +6,17 @@ export function Footer() {
           <p className="font-semibold text-ink">船海能动资料共享平台</p>
           <p className="mt-1">武汉理工大学船海与能源动力工程学院 · 课程资料交流</p>
         </div>
-        <p className="text-xs text-slate-400">仅供学习交流使用</p>
+        <div className="flex flex-col items-end gap-1">
+          <a
+            href="https://beian.miit.gov.cn/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-slate-400 hover:text-slate-500"
+          >
+            鄂ICP备2026027939号
+          </a>
+          <p className="text-xs text-slate-400">仅供学习交流使用</p>
+        </div>
       </div>
     </footer>
   );
