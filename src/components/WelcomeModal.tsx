@@ -59,7 +59,7 @@ export function WelcomeModal() {
           </p>
           <div>
             <p className="font-medium text-gray-900">联系与反馈</p>
-            <p className="mt-1">邮箱：364672@whut.wdu.cn</p>
+            <p className="mt-1">邮箱：364672@whut.edu.cn</p>
           </div>
         </div>
 
