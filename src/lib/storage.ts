@@ -1,6 +1,8 @@
 import { promises as fs, createReadStream } from "fs";
+import { stat } from "fs/promises";
 import crypto from "crypto";
 import path from "path";
+import { Readable } from "stream";
 import { MAX_FILE_SIZE_BYTES } from "@/lib/upload-limits";
 
 const STORAGE_ROOT =
@@ -20,6 +22,7 @@ export interface StorageProvider {
   delete(fileKey: string): Promise<void>;
   exists(fileKey: string): Promise<boolean>;
   getReadableStream(fileKey: string): Promise<ReadableStream>;
+  getFileSize(fileKey: string): Promise<number>;
 }
 
 class LocalDiskStorage implements StorageProvider {
@@ -69,10 +72,17 @@ class LocalDiskStorage implements StorageProvider {
     }
   }
 
+  async getFileSize(fileKey: string): Promise<number> {
+    const filePath = path.join(this.materialsDir, fileKey);
+    const info = await stat(filePath);
+    return info.size;
+  }
+
   getReadableStream(fileKey: string): Promise<ReadableStream> {
     const filePath = path.join(this.materialsDir, fileKey);
-    const stream = createReadStream(filePath);
-    return Promise.resolve(stream as unknown as ReadableStream);
+    const nodeStream = createReadStream(filePath);
+    // Node.js 18+ 支持 Readable.toWeb()，将 Node.js Readable 转为 Web ReadableStream
+    return Promise.resolve(Readable.toWeb(nodeStream) as ReadableStream);
   }
 }
 

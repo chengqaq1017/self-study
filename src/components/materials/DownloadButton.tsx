@@ -13,8 +13,7 @@ export function DownloadButton({
   fileName: string;
 }) {
   const { data: session } = useSession();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [clicked, setClicked] = useState(false);
 
   if (!session?.user) {
     return (
@@ -28,45 +27,22 @@ export function DownloadButton({
     );
   }
 
-  async function handleDownload() {
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await fetch(`/api/materials/${materialId}/download`);
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error ?? "下载失败");
-      }
-
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "下载失败");
-    } finally {
-      setLoading(false);
-    }
-  }
-
+  // 使用原生 <a> 标签直接访问下载 API，浏览器原生处理下载：
+  // 1. 自动携带 session cookie（同源请求）
+  // 2. 不经过 JS 内存，大文件也不会卡
+  // 3. 手机端自动弹出保存/下载管理器
+  // 4. 浏览器原生显示下载进度
   return (
-    <div>
-      <button
-        type="button"
-        onClick={handleDownload}
-        disabled={loading}
-        className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2.5 text-white hover:bg-primary-light disabled:opacity-50"
-      >
-        <Download className="h-4 w-4" />
-        {loading ? "下载中..." : "下载文件"}
-      </button>
-      {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
-    </div>
+    <a
+      href={`/api/materials/${materialId}/download`}
+      download={fileName}
+      onClick={() => setClicked(true)}
+      className={`inline-flex items-center gap-2 rounded-md px-6 py-2.5 text-white ${
+        clicked ? "cursor-wait bg-gray-400" : "bg-primary hover:bg-primary-light"
+      }`}
+    >
+      <Download className="h-4 w-4" />
+      {clicked ? "下载中..." : "下载文件"}
+    </a>
   );
 }

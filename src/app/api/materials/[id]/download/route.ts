@@ -22,6 +22,7 @@ export async function GET(
       fileUrl: true,
       fileName: true,
       fileType: true,
+      fileSize: true,
       uploaderId: true,
     },
   });
@@ -49,6 +50,16 @@ export async function GET(
     );
   }
 
+  // 获取文件实际大小（优先用数据库记录，回退到文件系统查询）
+  let fileSize = material.fileSize;
+  if (!fileSize || fileSize <= 0) {
+    try {
+      fileSize = await storage.getFileSize(material.fileUrl);
+    } catch {
+      fileSize = 0;
+    }
+  }
+
   // 更新下载计数和下载日志
   await Promise.all([
     prisma.material.update({
@@ -66,10 +77,19 @@ export async function GET(
   // 流式传输文件
   const fileStream = await storage.getReadableStream(material.fileUrl);
 
-  return new Response(fileStream as unknown as BodyInit, {
-    headers: {
-      "Content-Type": material.fileType || "application/octet-stream",
-      "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(material.fileName)}`,
-    },
-  });
+  // 编码文件名（兼容中英文及各种浏览器）
+  const encodedFilename = encodeURIComponent(material.fileName);
+
+  const headers: Record<string, string> = {
+    // application/octet-stream 强制浏览器下载而非预览，手机端弹出保存对话框
+    "Content-Type": "application/octet-stream",
+    // Content-Disposition 使用 attachment 强制下载，同时提供 RFC 5987 编码和普通文件名双保险
+    "Content-Disposition": `attachment; filename="${encodedFilename}"; filename*=UTF-8''${encodedFilename}`,
+  };
+
+  if (fileSize > 0) {
+    headers["Content-Length"] = String(fileSize);
+  }
+
+  return new Response(fileStream, { headers });
 }
