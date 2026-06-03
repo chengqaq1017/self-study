@@ -54,10 +54,18 @@ jobs:
       - name: Build and restart
         run: |
           ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" \
+            -o ServerAliveInterval=30 \
+            -o ServerAliveCountMax=6 \
             "$SERVER_USER@$SERVER_HOST" << EOF
           set -e
           cd "$SERVER_PATH"
+          echo "Node: \$(node -v)"
+          echo "npm: \$(npm -v)"
+          echo "pm2: \$(command -v pm2 || true)"
+          echo "Install dependencies"
           npm ci
+          echo "Build app"
           npm run build
+          echo "Restart pm2 app: $PM2_APP_NAME"
           pm2 restart "$PM2_APP_NAME"
           EOF
