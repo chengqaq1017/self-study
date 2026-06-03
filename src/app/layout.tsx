@@ -7,14 +7,15 @@ import { WelcomeModal } from "@/components/WelcomeModal";
 
 export const metadata: Metadata = {
   title: "船海能动资料共享平台",
-  description: "武汉理工大学船海与能源动力工程学院课程资料共享平台",
+  description:
+    "武汉理工大学船海与能源动力工程学院课程资料共享平台，船舶与海洋工程、轮机工程、能源与动力工程（船舶）专业资料一站式检索下载。",
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
-    shortcut: "/favicon.ico",
+    shortcut: "/favicon.svg",
     apple: [
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
@@ -23,6 +24,21 @@ export const metadata: Metadata = {
     capable: true,
     title: "船海能动资料平台",
     statusBarStyle: "default",
+  },
+  openGraph: {
+    title: "船海能动资料共享平台",
+    description:
+      "武汉理工大学船海与能源动力工程学院课程资料共享平台",
+    url: "https://whutstudy.cn",
+    siteName: "船海能动资料共享",
+    images: [
+      {
+        url: "/icon-512.png",
+        width: 512,
+        height: 512,
+        alt: "武汉理工大学校徽",
+      },
+    ],
   },
 };
 
