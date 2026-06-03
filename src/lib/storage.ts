@@ -1,6 +1,7 @@
 import { promises as fs, createReadStream } from "fs";
 import crypto from "crypto";
 import path from "path";
+import { MAX_FILE_SIZE_BYTES } from "@/lib/upload-limits";
 
 const STORAGE_ROOT =
   process.env.STORAGE_ROOT ??
@@ -116,4 +117,4 @@ export const ALLOWED_EXTENSIONS = [
 ];
 
 export const MAX_FILE_SIZE =
-  parseInt(process.env.MAX_FILE_SIZE_MB ?? "50", 10) * 1024 * 1024;
+  MAX_FILE_SIZE_BYTES;

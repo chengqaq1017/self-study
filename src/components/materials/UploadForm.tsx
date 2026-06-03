@@ -6,6 +6,7 @@ import { useDropzone } from "react-dropzone";
 import { FileText, Upload, X } from "lucide-react";
 import { SubjectCombobox, type SubjectOption } from "@/components/subjects/SubjectCombobox";
 import { sortSubjectsByPinyin } from "@/lib/subjects";
+import { MAX_FILE_SIZE_BYTES, MAX_FILE_SIZE_LABEL } from "@/lib/upload-limits";
 
 function titleFromFileName(fileName: string) {
   return fileName.replace(/\.[^.]+$/, "").trim();
@@ -38,7 +39,7 @@ export function UploadForm({ subjects }: { subjects: SubjectOption[] }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: true,
-    maxSize: 50 * 1024 * 1024,
+    maxSize: MAX_FILE_SIZE_BYTES,
   });
 
   async function resolveSubjectId() {
@@ -231,7 +232,7 @@ export function UploadForm({ subjects }: { subjects: SubjectOption[] }) {
             {isDragActive ? "松开以添加文件" : "拖放文件到此处，或点击选择多个文件"}
           </p>
           <p className="mt-1 text-center text-xs text-gray-400">
-            支持 PDF、Word、PPT、图片、压缩包，单个文件最大 50MB
+            支持 PDF、Word、PPT、图片、压缩包，单个文件最大 {MAX_FILE_SIZE_LABEL}
           </p>
         </div>
 

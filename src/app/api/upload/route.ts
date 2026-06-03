@@ -7,6 +7,7 @@ import {
   MAX_FILE_SIZE,
   getStorage,
 } from "@/lib/storage";
+import { MAX_FILE_SIZE_LABEL } from "@/lib/upload-limits";
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
 
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: `文件大小超过 ${process.env.MAX_FILE_SIZE_MB ?? "50"}MB 限制` },
+        { error: `文件大小超过 ${MAX_FILE_SIZE_LABEL} 限制` },
         { status: 400 }
       );
     }

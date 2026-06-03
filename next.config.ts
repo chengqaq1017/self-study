@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
+const maxFileSizeMb = Number.parseInt(process.env.MAX_FILE_SIZE_MB ?? "200", 10);
+const uploadSizeLimitBytes = (Number.isFinite(maxFileSizeMb) ? maxFileSizeMb : 200) * 1024 * 1024;
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    proxyClientMaxBodySize: uploadSizeLimitBytes,
+  },
 };
 
 export default nextConfig;
