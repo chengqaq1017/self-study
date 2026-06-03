@@ -24,16 +24,16 @@ export function MaterialCard({ material }: MaterialCardProps) {
   return (
     <Link
       href={`/materials/${material.id}`}
-      className="block rounded-lg border bg-white p-4 transition-shadow hover:shadow-md"
+      className="card-hover block rounded-lg border border-white/70 bg-white/86 p-4 shadow-sm"
     >
       <div className="flex items-start gap-3">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-50">
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary/8">
           <FileText className="h-5 w-5 text-primary" />
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-medium text-gray-900">{material.title}</h3>
-          {material.semester && <p className="text-xs text-gray-400">年份：{material.semester}</p>}
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
+          <h3 className="truncate font-semibold text-ink">{material.title}</h3>
+          {material.semester && <p className="mt-0.5 text-xs text-slate-400">年份：{material.semester}</p>}
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-400">
             <span className="flex items-center gap-1 whitespace-nowrap">
               <Download className="h-3 w-3" />
               {material.downloadCount}
@@ -44,7 +44,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
             </span>
           </div>
           {material.uploader?.name && (
-            <p className="mt-1 text-xs text-gray-400">上传：{material.uploader.name}</p>
+            <p className="mt-1 text-xs text-slate-400">上传：{material.uploader.name}</p>
           )}
         </div>
       </div>

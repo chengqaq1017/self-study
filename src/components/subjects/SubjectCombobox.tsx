@@ -70,20 +70,20 @@ export function SubjectCombobox({
         onChange={(event) => handleInput(event.target.value)}
         onFocus={() => setOpen(true)}
         onBlur={() => window.setTimeout(() => setOpen(false), 120)}
-        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className="mt-1 block w-full rounded-md border border-slate-200 px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         placeholder={placeholder}
         autoComplete="off"
       />
 
       {open && (matches.length > 0 || canCreate) && (
-        <div className="absolute z-20 mt-1 max-h-80 w-full overflow-auto rounded-md border bg-white py-1 text-sm shadow-lg">
+        <div className="absolute z-20 mt-1 max-h-80 w-full overflow-auto rounded-md border border-slate-200 bg-white py-1 text-sm shadow-xl shadow-slate-900/10">
           {matches.map((subject) => (
             <button
               key={subject.id}
               type="button"
               onMouseDown={(event) => event.preventDefault()}
               onClick={() => selectSubject(subject)}
-              className="block w-full px-3 py-2 text-left text-gray-700 hover:bg-blue-50 hover:text-primary"
+              className="block w-full px-3 py-2 text-left text-slate-700 hover:bg-primary/8 hover:text-primary"
             >
               {subject.name}
             </button>
@@ -98,7 +98,7 @@ export function SubjectCombobox({
                 setOpen(false);
                 onChange?.(null, query.trim());
               }}
-              className="block w-full border-t px-3 py-2 text-left text-primary hover:bg-blue-50"
+              className="block w-full border-t border-slate-100 px-3 py-2 text-left text-primary hover:bg-primary/8"
             >
               新增课程：{query.trim()}
             </button>

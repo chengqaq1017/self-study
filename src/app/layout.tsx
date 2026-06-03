@@ -6,7 +6,11 @@ import { Footer } from "@/components/layout/Footer";
 import { WelcomeModal } from "@/components/WelcomeModal";
 
 export const metadata: Metadata = {
-  title: "船海能动资料共享平台",
+  metadataBase: new URL("https://whutstudy.cn"),
+  title: {
+    default: "船海能动资料共享平台",
+    template: "%s | 船海能动资料共享平台",
+  },
   description:
     "武汉理工大学船海与能源动力工程学院课程资料共享平台，船舶与海洋工程、轮机工程、能源与动力工程（船舶）专业资料一站式检索下载。",
   icons: {
@@ -25,20 +29,30 @@ export const metadata: Metadata = {
     title: "船海能动资料平台",
     statusBarStyle: "default",
   },
+  applicationName: "船海能动资料共享平台",
+  keywords: ["武汉理工大学", "船海学院", "课程资料", "资料共享", "自学平台"],
   openGraph: {
     title: "船海能动资料共享平台",
     description:
       "武汉理工大学船海与能源动力工程学院课程资料共享平台",
     url: "https://whutstudy.cn",
     siteName: "船海能动资料共享",
+    locale: "zh_CN",
+    type: "website",
     images: [
       {
-        url: "/icon-512.png",
-        width: 512,
-        height: 512,
-        alt: "武汉理工大学校徽",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "船海能动资料共享平台网页缩略图",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "船海能动资料共享平台",
+    description: "武汉理工大学船海与能源动力工程学院课程资料共享平台。",
+    images: ["/og-image.png"],
   },
 };
 
@@ -52,7 +66,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col">
         <SessionProvider>
           <Navbar />
-          <main className="page-fade mx-auto w-full max-w-7xl flex-1 px-4 py-4 sm:px-6 sm:py-6">
+          <main className="page-fade mx-auto w-full max-w-7xl flex-1 px-4 py-5 sm:px-6 sm:py-8">
             {children}
           </main>
           <WelcomeModal />

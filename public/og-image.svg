@@ -1,0 +1,50 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#F5FAFC"/>
+  <path d="M0 0H1200V630H0V0Z" fill="url(#bg)"/>
+  <path d="M72 462C178 408 265 398 362 430C458 461 545 538 668 508C792 479 872 353 1035 369C1105 376 1162 405 1200 430V630H0V509C17 494 41 478 72 462Z" fill="#0B4F8A" fill-opacity=".12"/>
+  <path d="M-16 526C123 454 243 457 361 494C497 537 587 589 724 543C845 502 934 432 1055 449C1132 460 1176 492 1200 516V630H-16V526Z" fill="#0F9F8F" fill-opacity=".16"/>
+  <g opacity=".48">
+    <path d="M80 86H1120" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M80 142H1120" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M80 198H1120" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M80 254H1120" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M80 310H1120" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M80 366H1120" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M80 422H1120" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M80 478H1120" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M128 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M224 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M320 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M416 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M512 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M608 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M704 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M800 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M896 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
+    <path d="M992 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
+  </g>
+  <rect x="76" y="72" width="1048" height="486" rx="32" fill="white" fill-opacity=".82" stroke="white" stroke-width="2"/>
+  <rect x="116" y="110" width="86" height="86" rx="18" fill="#0B4F8A"/>
+  <path d="M137 158C150 140 167 132 186 132C181 149 166 164 137 178V158Z" fill="#86F2E8"/>
+  <path d="M137 178C160 173 180 165 195 150C191 177 170 190 137 190V178Z" fill="white"/>
+  <text x="228" y="145" fill="#0B4F8A" font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif" font-size="30" font-weight="700">武汉理工大学</text>
+  <text x="228" y="185" fill="#64748B" font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif" font-size="24">船海与能源动力工程学院</text>
+  <text x="116" y="304" fill="#102033" font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif" font-size="70" font-weight="800">船海能动资料共享平台</text>
+  <text x="118" y="368" fill="#475569" font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif" font-size="30">课程笔记 · 试卷资料 · 实验报告 · 复习参考</text>
+  <g>
+    <rect x="116" y="426" width="164" height="56" rx="28" fill="#0B4F8A" fill-opacity=".1"/>
+    <text x="150" y="462" fill="#0B4F8A" font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif" font-size="22" font-weight="700">课程索引</text>
+    <rect x="300" y="426" width="164" height="56" rx="28" fill="#0F9F8F" fill-opacity=".12"/>
+    <text x="334" y="462" fill="#0F766E" font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif" font-size="22" font-weight="700">资料审核</text>
+    <rect x="484" y="426" width="164" height="56" rx="28" fill="#F59E0B" fill-opacity=".13"/>
+    <text x="518" y="462" fill="#A16207" font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif" font-size="22" font-weight="700">年份筛选</text>
+  </g>
+  <text x="118" y="526" fill="#64748B" font-family="Arial, sans-serif" font-size="24">whutstudy.cn</text>
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 86) rotate(145) scale(760 570)">
+      <stop stop-color="#BEE7F3"/>
+      <stop offset=".5" stop-color="#EAF6F7"/>
+      <stop offset="1" stop-color="#F8FAFC"/>
+    </radialGradient>
+  </defs>
+</svg>

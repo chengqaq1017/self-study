@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { MaterialCard } from "@/components/materials/MaterialCard";
 import { SubjectCombobox } from "@/components/subjects/SubjectCombobox";
 import { sortSubjectsByPinyin } from "@/lib/subjects";
+import { Search } from "lucide-react";
 
 export default async function MaterialsPage({
   searchParams,
@@ -59,21 +60,24 @@ export default async function MaterialsPage({
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">资料库</h1>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-bold text-ink">资料库</h1>
+        <p className="text-sm text-slate-500">按课程、年份和关键词快速定位可下载资料。</p>
+      </div>
 
-      <form className="grid grid-cols-1 gap-3 rounded-lg border bg-white p-3 shadow-sm sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end">
+      <form className="surface grid grid-cols-1 gap-3 rounded-lg p-4 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end">
         <div className="min-w-0 lg:w-64">
-          <label className="block text-xs text-gray-500">搜索</label>
+          <label className="block text-xs font-medium text-slate-500">搜索</label>
           <input
             type="text"
             name="q"
             defaultValue={q}
             placeholder="搜索标题或描述"
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none lg:py-1.5"
+            className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 shadow-sm focus:border-primary focus:outline-none lg:py-1.5"
           />
         </div>
         <div className="min-w-0 lg:w-64">
-          <label className="block text-xs text-gray-500">课程</label>
+          <label className="block text-xs font-medium text-slate-500">课程</label>
           <SubjectCombobox
             subjects={subjects}
             value={subjectId}
@@ -82,21 +86,21 @@ export default async function MaterialsPage({
           />
         </div>
         <div className="min-w-0 lg:w-32">
-          <label className="block text-xs text-gray-500">年份</label>
+          <label className="block text-xs font-medium text-slate-500">年份</label>
           <input
             type="text"
             name="year"
             defaultValue={year}
             placeholder="2025"
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none lg:py-1.5"
+            className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 shadow-sm focus:border-primary focus:outline-none lg:py-1.5"
           />
         </div>
         <div className="min-w-0 lg:w-36">
-          <label className="block text-xs text-gray-500">排序</label>
+          <label className="block text-xs font-medium text-slate-500">排序</label>
           <select
             name="sort"
             defaultValue={sort}
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none lg:py-1.5"
+            className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 shadow-sm focus:border-primary focus:outline-none lg:py-1.5"
           >
             <option value="latest">最新上传</option>
             <option value="popular">最多下载</option>
@@ -104,19 +108,20 @@ export default async function MaterialsPage({
         </div>
         <button
           type="submit"
-          className="rounded-md bg-primary px-4 py-2 text-white hover:bg-primary-light sm:self-end lg:py-1.5"
+          className="flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-white shadow-sm shadow-primary/20 hover:bg-primary-light sm:self-end lg:py-1.5"
         >
+          <Search className="h-4 w-4" />
           筛选
         </button>
       </form>
 
       {materials.length === 0 ? (
-        <div className="rounded-lg border bg-white p-12 text-center text-gray-400">
+        <div className="surface rounded-lg p-12 text-center text-slate-400">
           暂未找到相关资料
         </div>
       ) : (
         <>
-          <p className="text-sm text-gray-500">共 {total} 份资料</p>
+          <p className="text-sm text-slate-500">共 {total} 份资料</p>
           <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
             {materials.map((material) => (
               <MaterialCard key={material.id} material={material} />
@@ -126,15 +131,15 @@ export default async function MaterialsPage({
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-3">
               {page > 1 && (
-                <Link href={pageQuery(page - 1)} className="rounded-md border bg-white px-4 py-2 text-sm hover:bg-gray-50">
+                <Link href={pageQuery(page - 1)} className="rounded-md border border-slate-200 bg-white/86 px-4 py-2 text-sm text-slate-600 hover:bg-white">
                   上一页
                 </Link>
               )}
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-slate-500">
                 {page} / {totalPages}
               </span>
               {page < totalPages && (
-                <Link href={pageQuery(page + 1)} className="rounded-md border bg-white px-4 py-2 text-sm hover:bg-gray-50">
+                <Link href={pageQuery(page + 1)} className="rounded-md border border-slate-200 bg-white/86 px-4 py-2 text-sm text-slate-600 hover:bg-white">
                   下一页
                 </Link>
               )}

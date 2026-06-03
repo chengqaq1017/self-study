@@ -31,26 +31,26 @@ export function WelcomeModal() {
   if (!open) return null;
 
   return (
-    <div className="modal-fade fixed inset-0 z-[60] flex items-end justify-center bg-black/50 p-3 sm:items-center">
-      <div className="modal-panel w-full max-w-lg rounded-lg bg-white p-5 shadow-xl sm:p-6">
+    <div className="modal-fade fixed inset-0 z-[60] flex items-end justify-center bg-slate-950/50 p-3 backdrop-blur-sm sm:items-center">
+      <div className="modal-panel w-full max-w-lg rounded-lg border border-white/70 bg-white p-5 shadow-2xl shadow-slate-950/18 sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">公告</h2>
-            <p className="mt-1 text-sm text-gray-500">
+            <h2 className="text-lg font-semibold text-ink">公告</h2>
+            <p className="mt-1 text-sm text-slate-500">
               船海与能源动力工程学院课程资料库已按 2024 版培养方案重新整理。
             </p>
           </div>
           <button
             type="button"
             onClick={close}
-            className="rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
             aria-label="关闭"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="mt-5 space-y-4 text-sm leading-6 text-gray-600">
+        <div className="mt-5 space-y-4 text-sm leading-6 text-slate-600">
           <p>
             平台现在只收录船舶与海洋工程、轮机工程、能源与动力工程（船舶）相关课程资料。上传时可以一次选择多个文件，并用单个年份标注资料来源。
           </p>
@@ -58,17 +58,17 @@ export function WelcomeModal() {
             个人中心已支持修改姓名、邮箱和密码。资料仍需审核后公开，请上传与课程学习直接相关的内容。
           </p>
           <div>
-            <p className="font-medium text-gray-900">联系与反馈</p>
+            <p className="font-medium text-ink">联系与反馈</p>
             <p className="mt-1">邮箱：364672@whut.edu.cn</p>
           </div>
         </div>
 
-        <label className="mt-5 flex items-center gap-2 text-sm text-gray-600">
+        <label className="mt-5 flex items-center gap-2 text-sm text-slate-600">
           <input
             type="checkbox"
             checked={hideForSevenDays}
             onChange={(e) => setHideForSevenDays(e.target.checked)}
-            className="h-4 w-4 rounded border-gray-300"
+            className="h-4 w-4 rounded border-slate-300 accent-primary"
           />
           7 天内不再显示
         </label>
@@ -76,7 +76,7 @@ export function WelcomeModal() {
         <button
           type="button"
           onClick={close}
-          className="mt-5 w-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-light"
+          className="mt-5 w-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm shadow-primary/20 hover:bg-primary-light"
         >
           我知道了
         </button>

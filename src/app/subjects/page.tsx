@@ -16,8 +16,8 @@ export default async function SubjectsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">课程目录</h1>
-        <p className="mt-2 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-ink">课程目录</h1>
+        <p className="mt-2 text-sm text-slate-500">
           仅展示船海与能源动力工程学院相关专业培养方案课程，按拼音排序。
         </p>
       </div>
@@ -27,11 +27,13 @@ export default async function SubjectsPage() {
           <Link
             key={subject.id}
             href={`/subjects/${subject.id}`}
-            className="rounded-lg border bg-white p-4 transition-shadow hover:shadow-md"
+            className="card-hover rounded-lg border border-white/70 bg-white/86 p-4 shadow-sm"
           >
-            <p className="font-medium text-gray-900">{subject.name}</p>
-            {subject.code && <p className="mt-0.5 text-xs text-gray-400">{subject.code}</p>}
-            <p className="mt-2 text-sm text-gray-500">{subject._count.materials} 份资料</p>
+            <p className="font-semibold text-ink">{subject.name}</p>
+            {subject.code && <p className="mt-0.5 text-xs text-slate-400">{subject.code}</p>}
+            <p className="mt-3 inline-flex rounded-full bg-primary/8 px-2.5 py-1 text-xs font-medium text-primary">
+              {subject._count.materials} 份资料
+            </p>
           </Link>
         ))}
       </div>
