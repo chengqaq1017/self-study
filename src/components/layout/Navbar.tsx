@@ -13,11 +13,11 @@ export async function Navbar() {
         {/* 左侧：Logo + 标题 */}
         <Link href="/" className="flex min-w-0 items-center gap-2.5">
           <Image
-            src="/naoep-logo.png"
-            alt="船海与能源动力工程学院"
-            width={36}
-            height={36}
-            className="h-8 w-auto flex-shrink-0 sm:h-9"
+            src="/icon-512.png"
+            alt="武汉理工大学"
+            width={40}
+            height={40}
+            className="h-8 w-8 flex-shrink-0 rounded sm:h-9 sm:w-9"
             priority
           />
           <span className="truncate text-sm font-bold text-primary sm:text-base">
