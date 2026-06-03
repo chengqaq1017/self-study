@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useDropzone } from "react-dropzone";
+import { useDropzone, type FileRejection } from "react-dropzone";
 import { FileText, Upload, X } from "lucide-react";
 import { SubjectCombobox, type SubjectOption } from "@/components/subjects/SubjectCombobox";
 import { sortSubjectsByPinyin } from "@/lib/subjects";
@@ -10,6 +10,29 @@ import { MAX_FILE_SIZE_BYTES, MAX_FILE_SIZE_LABEL } from "@/lib/upload-limits";
 
 function titleFromFileName(fileName: string) {
   return fileName.replace(/\.[^.]+$/, "").trim();
+}
+
+async function getResponseError(response: Response, fallback: string) {
+  if (response.status === 413) {
+    return `文件太大，服务器当前没有放行 ${MAX_FILE_SIZE_LABEL} 上传。请检查 Nginx 或宝塔的上传大小限制。`;
+  }
+
+  try {
+    const contentType = response.headers.get("content-type") ?? "";
+    if (contentType.includes("application/json")) {
+      const data = await response.json();
+      return data.error ?? fallback;
+    }
+
+    const text = await response.text();
+    if (text.toLowerCase().includes("too large")) {
+      return `文件太大，服务器当前没有放行 ${MAX_FILE_SIZE_LABEL} 上传。请检查 Nginx 或宝塔的上传大小限制。`;
+    }
+  } catch {
+    // Fall through to the friendly fallback message.
+  }
+
+  return fallback;
 }
 
 export function UploadForm({ subjects }: { subjects: SubjectOption[] }) {
@@ -36,8 +59,21 @@ export function UploadForm({ subjects }: { subjects: SubjectOption[] }) {
     }
   }, []);
 
+  const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
+    const oversizedFile = fileRejections.find((rejection) =>
+      rejection.errors.some((item) => item.code === "file-too-large")
+    );
+
+    setError(
+      oversizedFile
+        ? `单个文件最大支持 ${MAX_FILE_SIZE_LABEL}，${oversizedFile.file.name} 已超过限制。`
+        : "文件不符合上传要求，请重新选择。"
+    );
+  }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
+    onDropRejected,
     multiple: true,
     maxSize: MAX_FILE_SIZE_BYTES,
   });
@@ -105,8 +141,7 @@ export function UploadForm({ subjects }: { subjects: SubjectOption[] }) {
         });
 
         if (!uploadRes.ok) {
-          const data = await uploadRes.json();
-          throw new Error(data.error ?? `${file.name} 上传失败`);
+          throw new Error(await getResponseError(uploadRes, `${file.name} 上传失败`));
         }
 
         const uploadData = await uploadRes.json();
@@ -133,8 +168,7 @@ export function UploadForm({ subjects }: { subjects: SubjectOption[] }) {
         });
 
         if (!materialRes.ok) {
-          const data = await materialRes.json();
-          throw new Error(data.error ?? `${file.name} 创建资料记录失败`);
+          throw new Error(await getResponseError(materialRes, `${file.name} 创建资料记录失败`));
         }
       }
 
