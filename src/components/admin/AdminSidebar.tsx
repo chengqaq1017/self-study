@@ -21,7 +21,7 @@ export function AdminSidebar() {
         <div className="hidden px-3 py-2 text-sm font-semibold text-gray-500 lg:mb-3 lg:block">
           管理后台
         </div>
-        <div className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1 lg:mx-0 lg:block lg:space-y-1 lg:overflow-visible lg:px-0 lg:pb-0">
+        <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none lg:block lg:space-y-1 lg:overflow-visible lg:pb-0">
           {links.map((link) => {
             const isActive = pathname === link.href;
             return (

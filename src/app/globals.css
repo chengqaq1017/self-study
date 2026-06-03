@@ -15,7 +15,6 @@ body {
     radial-gradient(circle at 84% 0%, rgba(11, 79, 138, 0.13), transparent 30rem),
     linear-gradient(180deg, #f7fbfd 0%, #eef4f7 48%, #f8fafc 100%);
   color: #102033;
-  overflow-x: hidden;
 }
 
 ::selection {
@@ -127,6 +126,17 @@ textarea {
   textarea {
     font-size: 14px;
   }
+}
+
+/* ---- 隐藏滚动条（保留滚动功能）---- */
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
 /* ---- 动效偏好 ---- */

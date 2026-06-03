@@ -9,8 +9,8 @@ export async function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-white/70 bg-white/82 shadow-sm shadow-slate-900/5 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-2.5 sm:flex-nowrap sm:gap-3 sm:px-6">
-        <Link href="/" className="flex min-w-0 items-center gap-2.5">
+      <div className="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-2.5 sm:gap-3 sm:overflow-visible sm:px-6 scrollbar-none">
+        <Link href="/" className="flex min-w-0 flex-shrink-0 items-center gap-2.5">
           <Image
             src="/icon-512.png"
             alt="武汉理工大学"
@@ -27,7 +27,7 @@ export async function Navbar() {
           </span>
         </Link>
 
-        <div className="-mx-1 flex w-full min-w-0 items-center gap-1 overflow-x-auto px-1 text-sm sm:mx-0 sm:w-auto sm:justify-end sm:gap-2 sm:overflow-visible sm:px-0">
+        <div className="flex min-w-0 flex-shrink-0 items-center gap-1 text-sm sm:justify-end sm:gap-2">
           <Link
             href="/subjects"
             className="flex-shrink-0 rounded-md px-2.5 py-1.5 text-slate-600 transition-colors hover:bg-primary/8 hover:text-primary sm:px-3"
