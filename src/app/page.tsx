@@ -24,7 +24,7 @@ export default async function Home() {
   return (
     <div className="space-y-7 sm:space-y-9">
       <section className="surface subtle-grid overflow-hidden rounded-lg">
-        <div className="grid gap-8 p-5 sm:p-8 lg:grid-cols-[1.08fr_0.92fr] lg:p-10">
+        <div className="grid gap-6 p-4 sm:gap-8 sm:p-8 lg:grid-cols-[1.08fr_0.92fr] lg:p-10">
           <div>
             <div className="flex flex-wrap items-center gap-4">
               <Image
@@ -45,12 +45,12 @@ export default async function Home() {
               />
             </div>
 
-            <div className="mt-7 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white/75 px-3 py-1 text-xs font-medium text-primary">
+            <div className="mt-7 inline-flex max-w-full items-center gap-2 rounded-full border border-primary/15 bg-white/75 px-3 py-1 text-xs font-medium text-primary">
               <Compass className="h-3.5 w-3.5" />
-              船海与能源动力工程学院课程资料导航
+              <span className="truncate">船海与能源动力工程学院课程资料导航</span>
             </div>
 
-            <h1 className="mt-5 max-w-3xl text-3xl font-bold leading-tight text-ink sm:text-5xl">
+            <h1 className="mt-5 max-w-3xl text-2xl font-bold leading-tight text-ink sm:text-5xl">
               让课程资料更好找，也更值得被整理。
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
@@ -92,7 +92,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="hero-radar relative overflow-hidden rounded-lg p-5 text-white shadow-2xl shadow-primary/18 sm:p-6">
+          <div className="hero-radar relative overflow-hidden rounded-lg p-4 text-white shadow-2xl shadow-primary/18 sm:p-6">
             <div className="absolute -right-12 -top-14 h-40 w-40 rounded-full border border-white/18" />
             <div className="absolute -right-4 top-12 h-24 w-24 rounded-full border border-white/16" />
             <div className="absolute bottom-8 right-10 h-3 w-3 rounded-full bg-white/80" />
@@ -107,7 +107,7 @@ export default async function Home() {
                 </div>
               </div>
 
-              <div className="mt-8 grid grid-cols-3 gap-3">
+              <div className="mt-6 grid grid-cols-1 gap-3 sm:mt-8 sm:grid-cols-3">
                 <div className="rounded-lg bg-white/14 p-3">
                   <div className="flex items-center gap-1.5 text-2xl font-bold">
                     <BookOpen className="h-5 w-5" />
