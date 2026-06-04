@@ -22,6 +22,36 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**/*.ts', 'src/**/*.tsx', 'next.config.ts', 'prisma/schema.prisma') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-
+
+      - name: Build standalone bundle
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/self_study?schema=public' }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET || 'build-time-placeholder-secret' }}
+          AUTH_URL: ${{ secrets.AUTH_URL || 'http://localhost:3000' }}
+          AUTH_TRUST_HOST: "true"
+          MAX_FILE_SIZE_MB: ${{ secrets.MAX_FILE_SIZE_MB || '200' }}
+          NEXT_PUBLIC_MAX_FILE_SIZE_MB: ${{ secrets.NEXT_PUBLIC_MAX_FILE_SIZE_MB || '200' }}
+        run: |
+          npm ci
+          npm run build
+          cp -r public .next/standalone/
+          mkdir -p .next/standalone/.next
+          cp -r .next/static .next/standalone/.next/
+          test -f .next/standalone/server.js
+          grep -r "2026027939" .next/standalone/.next/ && echo "ICP: OK" || { echo "ICP: MISSING"; exit 1; }
+
       - name: Prepare SSH
         run: |
           mkdir -p ~/.ssh
@@ -29,15 +59,16 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -T 15 -p "$SERVER_PORT" -H "$SERVER_HOST" >> ~/.ssh/known_hosts
 
-      - name: Sync files to server
+      - name: Upload bundle to server
         run: |
+          ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" \
+            "rm -rf '$SERVER_PATH/.upload' && mkdir -p '$SERVER_PATH/.upload'"
           rsync -az --delete \
+            --exclude ".env" --exclude "storage" \
             -e "ssh -i ~/.ssh/deploy_key -p $SERVER_PORT" \
-            --exclude ".git" --exclude ".env" --exclude ".next" \
-            --exclude ".pgdata" --exclude "node_modules" --exclude "storage" \
-            ./ "$SERVER_USER@$SERVER_HOST:$SERVER_PATH/"
+            .next/standalone/ "$SERVER_USER@$SERVER_HOST:$SERVER_PATH/.upload/"
 
-      - name: Build and restart
+      - name: Activate and restart
         run: |
           ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" \
             -o ServerAliveInterval=60 \
@@ -45,17 +76,7 @@ jobs:
             "$SERVER_USER@$SERVER_HOST" << EOF
           set -e
           cd "$SERVER_PATH"
-          free -h
-
-          echo "=== Stop pm2 ==="
-          pm2 stop "$PM2_APP_NAME" || true
-
-          echo "=== Force-delete old .next ==="
-          sudo rm -rf .next 2>/dev/null || true
-          st=\$(stat -c '%a' .next 2>/dev/null || echo 'gone')
-          echo ".next status: \$st"
-
-          echo "=== Create swap (1GB) ==="
+          echo "=== Keep swap available for runtime spikes ==="
           if ! swapon --show 2>/dev/null | grep -q /swapfile; then
             sudo fallocate -l 1G /swapfile 2>/dev/null || sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 2>/dev/null || true
             sudo chmod 600 /swapfile 2>/dev/null || true
@@ -65,16 +86,21 @@ jobs:
           fi
           free -h
 
-          echo "=== Verify Footer source ==="
-          grep "2026027939" src/components/layout/Footer.tsx && echo "OK" || { echo "MISSING - abort"; exit 1; }
+          echo "=== Activate uploaded bundle ==="
+          test -f .upload/server.js
+          grep -r "2026027939" .upload/.next/ >/dev/null && echo "ICP: OK" || { echo "ICP: MISSING"; exit 1; }
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name ".upload" \
+            ! -name ".env" \
+            ! -name ".pgdata" \
+            ! -name "storage" \
+            ! -name "tmp" \
+            -exec rm -rf {} +
+          cp -a .upload/. .
+          rm -rf .upload
 
-          echo "=== Install deps ==="
-          rm -rf node_modules
-          npm ci
-          echo "=== Build ==="
-          npm run build
-          echo "=== Verify ICP in build ==="
-          grep -r "2026027939" .next/ 2>/dev/null && echo "ICP: OK" || echo "ICP: MISSING"
-          echo "=== Start pm2 ==="
-          pm2 start "$PM2_APP_NAME"
+          echo "=== Restart pm2 ==="
+          pm2 delete "$PM2_APP_NAME" || true
+          PORT="\${PORT:-3000}" HOSTNAME="\${HOSTNAME:-0.0.0.0}" pm2 start server.js --name "$PM2_APP_NAME"
+          pm2 save || true
           EOF
