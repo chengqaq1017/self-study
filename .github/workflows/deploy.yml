@@ -50,6 +50,8 @@ jobs:
           pm2 stop "$PM2_APP_NAME" || true
           echo "Clean & install"
           rm -rf .next node_modules
+          echo "Verify Footer source:"
+          grep "2026027939" src/components/layout/Footer.tsx && echo "Footer source OK" || echo "Footer source MISSING"
           NODE_OPTIONS="--max-old-space-size=384" npm ci
           echo "Build"
           NODE_OPTIONS="--max-old-space-size=1024" npm run build
