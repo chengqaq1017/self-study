@@ -50,9 +50,9 @@ jobs:
           pm2 stop "$PM2_APP_NAME" || true
           echo "Clean & install"
           rm -rf .next node_modules
-          NODE_OPTIONS="--max-old-space-size=256" npm ci
+          NODE_OPTIONS="--max-old-space-size=384" npm ci
           echo "Build"
-          NODE_OPTIONS="--max-old-space-size=256" npm run build
+          NODE_OPTIONS="--max-old-space-size=1024" npm run build
           echo "Start pm2"
           pm2 start "$PM2_APP_NAME"
           grep -r "2026027939" .next/server/app/ && echo "ICP: OK" || echo "ICP: MISSING"
