@@ -12,7 +12,7 @@ const internalPort = Number.parseInt(
   process.env.NEXT_INTERNAL_PORT || String(externalPort + 1),
   10,
 );
-const hostname = process.env.HOSTNAME || "0.0.0.0";
+const hostname = process.env.BIND_HOST || "0.0.0.0";
 
 const child = spawn(process.execPath, ["server.js"], {
   cwd: root,
