@@ -58,14 +58,26 @@ jobs:
           set -e
           cd "$SERVER_PATH"
           free -h
-          echo "Verify Footer source after sync:"
-          grep "2026027939" src/components/layout/Footer.tsx && echo "OK" || echo "MISSING"
-          echo "Install deps"
+
+          echo "=== Create swap (1GB) ==="
+          if ! swapon --show 2>/dev/null | grep -q /swapfile; then
+            sudo fallocate -l 1G /swapfile 2>/dev/null || sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 2>/dev/null || true
+            sudo chmod 600 /swapfile 2>/dev/null || chmod 600 /swapfile 2>/dev/null || true
+            sudo mkswap /swapfile 2>/dev/null || mkswap /swapfile 2>/dev/null || true
+            sudo swapon /swapfile 2>/dev/null || swapon /swapfile 2>/dev/null || true
+            echo "Swap done (errors above may be harmless)"
+          fi
+          free -h
+
+          echo "=== Verify Footer source ==="
+          grep "2026027939" src/components/layout/Footer.tsx && echo "OK" || { echo "MISSING - abort"; exit 1; }
+
+          echo "=== Install deps ==="
           rm -rf node_modules
-          NODE_OPTIONS="--max-old-space-size=384" npm ci
-          echo "Build"
-          NODE_OPTIONS="--max-old-space-size=1024" npm run build
-          echo "Start pm2"
+          npm ci
+          echo "=== Build ==="
+          npm run build
+          echo "=== Start pm2 ==="
           pm2 start "$PM2_APP_NAME"
           grep -r "2026027939" .next/server/app/ && echo "ICP: OK" || echo "ICP: MISSING"
           EOF
