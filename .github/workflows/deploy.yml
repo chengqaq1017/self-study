@@ -108,6 +108,11 @@ jobs:
           cp -a .upload/. .
           rm -rf .upload
 
+          echo "=== Ensure Nginx allows large uploads ==="
+          echo "client_max_body_size 100m;" | sudo tee /etc/nginx/conf.d/upload-size.conf
+          sudo nginx -t && sudo systemctl reload nginx
+          echo "Nginx upload limit: $(grep -r 'client_max_body_size' /etc/nginx/conf.d/upload-size.conf)"
+
           echo "=== Restart pm2 ==="
           pm2 delete "$PM2_APP_NAME" || true
           sudo pkill -f "server.js" || true
@@ -115,7 +120,7 @@ jobs:
           sudo fuser -k 3000/tcp 2>/dev/null || true
           sudo fuser -k 3001/tcp 2>/dev/null || true
           sleep 3
-          PORT=3000 NEXT_INTERNAL_PORT=3001 BIND_HOST="0.0.0.0" MAX_HEAP_MB=512 DB_POOL_MAX=5 pm2 start standalone-server.cjs --name "$PM2_APP_NAME" --update-env
+          PORT=3000 NEXT_INTERNAL_PORT=3001 BIND_HOST="0.0.0.0" MAX_HEAP_MB=512 DB_POOL_MAX=5 MAX_FILE_SIZE_MB=100 NEXT_PUBLIC_MAX_FILE_SIZE_MB=100 pm2 start standalone-server.cjs --name "$PM2_APP_NAME" --update-env
           sleep 6
           pm2 status
           pm2 logs "$PM2_APP_NAME" --lines 30 --nostream || true
