@@ -1,21 +1,53 @@
+import { ShieldCheck } from "lucide-react";
+
+const ICP_NUMBER = process.env.ICP_NUMBER ?? "鄂ICP备2026027939号-1";
+const PSB_NUMBER = process.env.PSB_NUMBER ?? ""; // 公安备案号，在 https://www.beian.gov.cn/ 注册后填入
+
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-white/70 bg-white/76 py-8 text-sm text-slate-500 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 sm:flex-row sm:items-end sm:justify-between sm:px-6">
-        <div>
-          <p className="font-semibold text-ink">船海能动资料共享平台</p>
-          <p className="mt-1">武汉理工大学船海与能源动力工程学院 · 课程资料交流</p>
-        </div>
-        <div className="flex flex-col items-end gap-1">
+    <footer className="mt-auto border-t border-slate-200 bg-slate-50 py-6 text-sm text-slate-500">
+      <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 sm:flex-row sm:justify-between sm:px-6">
+        {/* 左侧：版权 */}
+        <p className="text-center sm:text-left">
+          <span className="font-medium text-slate-700">
+            船海能动资料共享平台
+          </span>
+          <span className="mx-2 text-slate-300">·</span>
+          <span>武汉理工大学船海与能源动力工程学院</span>
+        </p>
+
+        {/* 右侧：双备案 */}
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs">
+          {/* ICP 备案 */}
           <a
             href="https://beian.miit.gov.cn/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-slate-400 hover:text-slate-500"
+            className="inline-flex items-center gap-1 text-slate-400 transition-colors hover:text-slate-600"
           >
-            鄂ICP备2026027939号
+            <ShieldCheck className="h-3.5 w-3.5" />
+            <span>{ICP_NUMBER}</span>
           </a>
-          <p className="text-xs text-slate-400">仅供学习交流使用</p>
+
+          {/* 公安备案（有号才显示） */}
+          {PSB_NUMBER && (
+            <>
+              <span className="text-slate-300" aria-hidden="true">|</span>
+              <a
+                href="https://www.beian.gov.cn/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-slate-400 transition-colors hover:text-slate-600"
+              >
+                <ShieldCheck className="h-3.5 w-3.5" />
+                <span>{PSB_NUMBER}</span>
+              </a>
+            </>
+          )}
+
+          {/* 声明 */}
+          <span className="text-slate-300" aria-hidden="true">|</span>
+          <span className="text-slate-400">仅供学习交流使用</span>
         </div>
       </div>
     </footer>
