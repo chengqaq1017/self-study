@@ -41,8 +41,8 @@ jobs:
           AUTH_SECRET: ${{ secrets.AUTH_SECRET || 'build-time-placeholder-secret' }}
           AUTH_URL: ${{ secrets.AUTH_URL || 'http://localhost:3000' }}
           AUTH_TRUST_HOST: "true"
-          MAX_FILE_SIZE_MB: ${{ secrets.MAX_FILE_SIZE_MB || '200' }}
-          NEXT_PUBLIC_MAX_FILE_SIZE_MB: ${{ secrets.NEXT_PUBLIC_MAX_FILE_SIZE_MB || '200' }}
+          MAX_FILE_SIZE_MB: ${{ secrets.MAX_FILE_SIZE_MB || '50' }}
+          NEXT_PUBLIC_MAX_FILE_SIZE_MB: ${{ secrets.NEXT_PUBLIC_MAX_FILE_SIZE_MB || '50' }}
         run: |
           npm ci
           npm run build

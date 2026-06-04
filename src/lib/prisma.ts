@@ -6,8 +6,15 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
+  const connectionPoolMax = Number.parseInt(
+    process.env.DB_POOL_MAX || "5",
+    10,
+  );
   const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL!,
+    max: connectionPoolMax,
+    idleTimeoutMillis: 30_000,
+    connectionTimeoutMillis: 10_000,
   });
   return new PrismaClient({ adapter });
 }
