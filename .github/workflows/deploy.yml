@@ -49,7 +49,9 @@ jobs:
           cp -r public .next/standalone/
           mkdir -p .next/standalone/.next
           cp -r .next/static .next/standalone/.next/
+          cp scripts/standalone-server.cjs .next/standalone/
           test -f .next/standalone/server.js
+          test -f .next/standalone/standalone-server.cjs
           test -n "$(find .next/standalone/.next/static/chunks -maxdepth 1 -name '*.css' -print -quit)"
           grep -r "2026027939" .next/standalone/.next/ && echo "ICP: OK" || { echo "ICP: MISSING"; exit 1; }
 
@@ -108,9 +110,10 @@ jobs:
 
           echo "=== Restart pm2 ==="
           pm2 delete "$PM2_APP_NAME" || true
-          PORT="\${PORT:-3000}" HOSTNAME="\${HOSTNAME:-0.0.0.0}" pm2 start server.js --name "$PM2_APP_NAME"
+          PORT="\${PORT:-3000}" HOSTNAME="\${HOSTNAME:-0.0.0.0}" pm2 start standalone-server.cjs --name "$PM2_APP_NAME"
           sleep 3
           css_name=\$(basename "\$css_file")
           curl -fsI "http://127.0.0.1:\${PORT:-3000}/_next/static/chunks/\$css_name"
+          curl -fsI "http://127.0.0.1:\${PORT:-3000}/login"
           pm2 save || true
           EOF
