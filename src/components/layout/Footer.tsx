@@ -5,15 +5,15 @@ const PSB_NUMBER = process.env.PSB_NUMBER ?? ""; // 公安备案号，在 https:
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-slate-300 bg-slate-100 py-6 text-sm text-slate-600">
+    <footer className="mt-auto border-t-2 border-primary bg-slate-900 py-8 text-sm text-slate-200">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 sm:flex-row sm:justify-between sm:px-6">
         {/* 左侧：版权 */}
         <p className="text-center sm:text-left">
-          <span className="font-semibold text-slate-800">
+          <span className="font-bold text-white">
             船海能动资料共享平台
           </span>
-          <span className="mx-2 text-slate-400">·</span>
-          <span className="text-slate-600">武汉理工大学船海与能源动力工程学院</span>
+          <span className="mx-2 text-slate-500">·</span>
+          <span className="text-slate-200">武汉理工大学船海与能源动力工程学院</span>
         </p>
 
         {/* 右侧：双备案 */}
@@ -23,7 +23,7 @@ export function Footer() {
             href="https://beian.miit.gov.cn/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-slate-500 transition-colors hover:text-slate-700"
+            className="inline-flex items-center gap-1 text-slate-300 transition-colors hover:text-white"
           >
             <ShieldCheck className="h-3.5 w-3.5" />
             <span>{ICP_NUMBER}</span>
@@ -32,12 +32,12 @@ export function Footer() {
           {/* 公安备案（有号才显示） */}
           {PSB_NUMBER && (
             <>
-              <span className="text-slate-400" aria-hidden="true">|</span>
+              <span className="text-slate-500" aria-hidden="true">|</span>
               <a
                 href="https://www.beian.gov.cn/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-slate-500 transition-colors hover:text-slate-700"
+                className="inline-flex items-center gap-1 text-slate-300 transition-colors hover:text-white"
               >
                 <ShieldCheck className="h-3.5 w-3.5" />
                 <span>{PSB_NUMBER}</span>
@@ -46,8 +46,8 @@ export function Footer() {
           )}
 
           {/* 声明 */}
-          <span className="text-slate-400" aria-hidden="true">|</span>
-          <span className="text-slate-500">仅供学习交流使用</span>
+          <span className="text-slate-500" aria-hidden="true">|</span>
+          <span className="text-slate-300">仅供学习交流使用</span>
         </div>
       </div>
     </footer>
