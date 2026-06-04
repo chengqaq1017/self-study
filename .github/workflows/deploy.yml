@@ -63,8 +63,10 @@ jobs:
           free -h || true
           echo "Stop pm2 app"
           pm2 stop "$PM2_APP_NAME" || true
-          echo "Clean Turbopack cache"
-          rm -rf .next/turbopack 2>/dev/null || true
+          echo "Clean previous build output"
+          rm -rf .next/turbopack .next/server .next/static .next/types .next/BUILD_ID .next/prerender-manifest.json .next/routes-manifest.json .next/required-server-files.json .next/diagnostics 2>/dev/null || true
+          echo "Check Footer source on server:"
+          grep -c "2026027939" src/components/layout/Footer.tsx 2>/dev/null && echo "Footer source OK" || echo "WARNING: Footer source MISSING ICP"
           echo "Install dependencies"
           NODE_OPTIONS="--max-old-space-size=384" npm ci
           echo "Build app"
