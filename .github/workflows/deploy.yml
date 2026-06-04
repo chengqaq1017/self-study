@@ -62,27 +62,17 @@ jobs:
           echo "Node: \$(node -v)"
           echo "npm: \$(npm -v)"
           echo "pm2: \$(command -v pm2 || true)"
+          echo "Free memory:"
+          free -h || true
           echo "Install dependencies"
           npm ci
           echo "Stop pm2 app for clean build"
           pm2 stop "$PM2_APP_NAME" || true
-          echo "Clean previous build"
-          sudo rm -rf .next 2>/dev/null || rm -rf .next 2>/dev/null || true
           echo "Build app"
-          npm run build
+          NODE_OPTIONS="--max-old-space-size=384" npm run build
           echo "Start pm2 app: $PM2_APP_NAME"
           pm2 start "$PM2_APP_NAME"
           echo ""
-          echo "=== Diagnostic: verify deployment ==="
-          echo "PM2 process info:"
-          pm2 show "$PM2_APP_NAME" 2>/dev/null || pm2 list
-          echo ""
-          echo "Server git log (last 3):"
-          git log --oneline -3 2>/dev/null || echo "Not a git repo or no git available"
-          echo ""
-          echo "Check if ICP备案号 exists in built output:"
-          grep -r "2026027939" .next/server/app/ 2>/dev/null || echo "ICP备案号 NOT FOUND in build output"
-          echo ""
-          echo "Check footer in built HTML:"
-          grep -o "仅供学习交流使用" .next/server/app/page.html 2>/dev/null || echo "Footer not found in built page"
+          echo "=== Verify build ==="
+          grep -r "2026027939" .next/server/app/ 2>/dev/null && echo "ICP备案号: OK" || echo "WARNING: ICP备案号 NOT FOUND"
           EOF
