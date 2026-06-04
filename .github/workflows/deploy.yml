@@ -64,10 +64,12 @@ jobs:
           echo "pm2: \$(command -v pm2 || true)"
           echo "Install dependencies"
           npm ci
+          echo "Stop pm2 app for clean build"
+          pm2 stop "$PM2_APP_NAME" || true
           echo "Clean previous build"
           rm -rf .next
           echo "Build app"
           npm run build
-          echo "Restart pm2 app: $PM2_APP_NAME"
-          pm2 restart "$PM2_APP_NAME"
+          echo "Start pm2 app: $PM2_APP_NAME"
+          pm2 start "$PM2_APP_NAME"
           EOF
