@@ -20,10 +20,10 @@ export async function Navbar() {
             priority
           />
           <span className="hidden min-w-0 sm:block">
-            <span className="block truncate text-sm font-bold text-ink sm:text-base">
+            <span className="block truncate text-sm font-bold text-primary sm:text-base">
               船海能动资料共享
             </span>
-            <span className="hidden text-xs text-slate-500 sm:block">WHUT NAOEP Study Hub</span>
+            <span className="hidden text-xs text-primary/70 sm:block">WHUT NAOEP Study Hub</span>
           </span>
         </Link>
 
