@@ -104,7 +104,7 @@ jobs:
             ! -name ".pgdata" \
             ! -name "storage" \
             ! -name "tmp" \
-            -exec rm -rf {} +
+            -exec sudo rm -rf {} +
           cp -a .upload/. .
           rm -rf .upload
 
