@@ -13,9 +13,8 @@ const internalPort = Number.parseInt(
   10,
 );
 const hostname = process.env.BIND_HOST || "0.0.0.0";
-
-// 限制 heap 内存：小规模校内平台，无需默认的大堆内存
 const maxHeapMB = Number.parseInt(process.env.MAX_HEAP_MB || "256", 10);
+
 const child = spawn(process.execPath, [`--max-old-space-size=${maxHeapMB}`, "server.js"], {
   cwd: root,
   env: {
