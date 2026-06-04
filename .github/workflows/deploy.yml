@@ -64,6 +64,8 @@ jobs:
           echo "pm2: \$(command -v pm2 || true)"
           echo "Install dependencies"
           npm ci
+          echo "Clean previous build"
+          rm -rf .next
           echo "Build app"
           npm run build
           echo "Restart pm2 app: $PM2_APP_NAME"
