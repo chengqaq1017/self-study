@@ -69,7 +69,7 @@ jobs:
       - name: Build app (on GitHub Actions)
         run: npm run build
         env:
-          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
           AUTH_SECRET: dummy-build-secret
 
       - name: Verify build
