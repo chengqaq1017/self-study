@@ -10,29 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    outputs:
-      artifact_name: ${{ steps.package.outputs.name }}
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 22
-      - run: npm ci
-      - run: npm run build
-      - name: Package build
-        id: package
-        run: |
-          tar czf build.tar.gz .next node_modules package.json package-lock.json
-          echo "name=build" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@v6
-        with:
-          name: build
-          path: build.tar.gz
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
     env:
       SERVER_HOST: ${{ secrets.SERVER_HOST }}
@@ -51,7 +29,7 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -T 15 -p "$SERVER_PORT" -H "$SERVER_HOST" >> ~/.ssh/known_hosts
 
-      - name: Sync source files to server
+      - name: Sync files to server
         run: |
           rsync -az --delete \
             -e "ssh -i ~/.ssh/deploy_key -p $SERVER_PORT" \
@@ -59,22 +37,23 @@ jobs:
             --exclude ".pgdata" --exclude "node_modules" --exclude "storage" \
             ./ "$SERVER_USER@$SERVER_HOST:$SERVER_PATH/"
 
-      - uses: actions/download-artifact@v6
-        with:
-          name: build
-
-      - name: Deploy build to server
+      - name: Build and restart
         run: |
-          scp -i ~/.ssh/deploy_key -P "$SERVER_PORT" \
-            build.tar.gz "$SERVER_USER@$SERVER_HOST:$SERVER_PATH/"
-
           ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" \
+            -o ServerAliveInterval=60 \
+            -o ServerAliveCountMax=10 \
             "$SERVER_USER@$SERVER_HOST" << EOF
           set -e
           cd "$SERVER_PATH"
+          free -h
+          echo "Stop pm2"
           pm2 stop "$PM2_APP_NAME" || true
-          tar xzf build.tar.gz
-          rm build.tar.gz
+          echo "Clean & install"
+          rm -rf .next node_modules
+          NODE_OPTIONS="--max-old-space-size=256" npm ci
+          echo "Build"
+          NODE_OPTIONS="--max-old-space-size=256" npm run build
+          echo "Start pm2"
           pm2 start "$PM2_APP_NAME"
-          echo "Deploy done"
+          grep -r "2026027939" .next/server/app/ && echo "ICP: OK" || echo "ICP: MISSING"
           EOF
