@@ -79,5 +79,15 @@ jobs:
           npm run build
           echo "=== Start pm2 ==="
           pm2 start "$PM2_APP_NAME"
-          grep -r "2026027939" .next/server/app/ && echo "ICP: OK" || echo "ICP: MISSING"
+          echo "=== Verify ICP in build ==="
+          if grep -r "2026027939" .next/ 2>/dev/null; then
+            echo "ICP: OK"
+          else
+            echo "ICP: MISSING in .next — checking source again..."
+            grep "2026027939" src/components/layout/Footer.tsx
+            echo "Listing .next server files (first 20):"
+            find .next -name "*.html" -o -name "*.js" | head -20
+            echo "Check for Footer in any JS/HTML:"
+            grep -rl "仅供学习交流" .next/ 2>/dev/null | head -5
+          fi
           EOF
