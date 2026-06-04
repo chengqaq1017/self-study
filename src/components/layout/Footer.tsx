@@ -9,11 +9,11 @@ export function Footer() {
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 sm:flex-row sm:justify-between sm:px-6">
         {/* 左侧：版权 */}
         <p className="text-center sm:text-left">
-          <span className="font-bold text-white">
+          <span className="font-bold text-primary">
             船海能动资料共享平台
           </span>
           <span className="mx-2 text-slate-500">·</span>
-          <span className="text-slate-200">武汉理工大学船海与能源动力工程学院</span>
+          <span className="text-primary/80">武汉理工大学船海与能源动力工程学院</span>
         </p>
 
         {/* 右侧：双备案 */}
