@@ -110,12 +110,17 @@ jobs:
 
           echo "=== Restart pm2 ==="
           pm2 delete "$PM2_APP_NAME" || true
-          pkill -f "$SERVER_PATH/server.js" || true
-          pkill -f "$SERVER_PATH/standalone-server.cjs" || true
-          PORT="\${PORT:-3000}" BIND_HOST="0.0.0.0" pm2 start standalone-server.cjs --name "$PM2_APP_NAME"
-          sleep 3
+          pkill -f "server.js" || true
+          pkill -f "standalone-server.cjs" || true
+          fuser -k 3000/tcp 2>/dev/null || true
+          fuser -k 3001/tcp 2>/dev/null || true
+          sleep 2
+          PORT=3000 NEXT_INTERNAL_PORT=3001 BIND_HOST="0.0.0.0" pm2 start standalone-server.cjs --name "$PM2_APP_NAME" --update-env
+          sleep 6
+          pm2 status
+          pm2 logs "$PM2_APP_NAME" --lines 30 --nostream || true
           css_name=\$(basename "\$css_file")
-          curl -fsI "http://127.0.0.1:\${PORT:-3000}/_next/static/chunks/\$css_name"
-          curl -fsI "http://127.0.0.1:\${PORT:-3000}/login"
+          curl -fsI "http://127.0.0.1:3000/_next/static/chunks/\$css_name"
+          curl -fsI "http://127.0.0.1:3000/login"
           pm2 save || true
           EOF
