@@ -110,11 +110,11 @@ jobs:
 
           echo "=== Restart pm2 ==="
           pm2 delete "$PM2_APP_NAME" || true
-          pkill -f "server.js" || true
-          pkill -f "standalone-server.cjs" || true
-          fuser -k 3000/tcp 2>/dev/null || true
-          fuser -k 3001/tcp 2>/dev/null || true
-          sleep 2
+          sudo pkill -f "server.js" || true
+          sudo pkill -f "standalone-server.cjs" || true
+          sudo fuser -k 3000/tcp 2>/dev/null || true
+          sudo fuser -k 3001/tcp 2>/dev/null || true
+          sleep 3
           PORT=3000 NEXT_INTERNAL_PORT=3001 BIND_HOST="0.0.0.0" pm2 start standalone-server.cjs --name "$PM2_APP_NAME" --update-env
           sleep 6
           pm2 status
