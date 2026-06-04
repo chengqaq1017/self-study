@@ -66,15 +66,11 @@ jobs:
           free -h || true
           echo "Stop pm2 app for clean build"
           pm2 stop "$PM2_APP_NAME" || true
-          echo "Clean previous build (for fresh Turbopack)"
-          sudo -n rm -rf .next 2>/dev/null || rm -rf .next 2>/dev/null || {
-            echo "Cannot full clean .next, removing build cache instead"
-            rm -rf .next/turbopack .next/server .next/static .next/BUILD_ID .next/prerender* .next/routes* .next/required* 2>/dev/null || true
-          }
-          echo "Free disk:"
+          echo "Clean Turbopack cache"
+          rm -rf .next/turbopack .next/server .next/static .next/BUILD_ID .next/prerender* .next/routes* .next/required-server-files.json 2>/dev/null || true
           df -h . || true
           echo "Install dependencies"
-          npm ci
+          NODE_OPTIONS="--max-old-space-size=384" npm ci
           echo "Build app"
           NODE_OPTIONS="--max-old-space-size=384" npm run build
           echo "Start pm2 app: $PM2_APP_NAME"
