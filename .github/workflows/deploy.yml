@@ -64,10 +64,17 @@ jobs:
           echo "pm2: \$(command -v pm2 || true)"
           echo "Free memory:"
           free -h || true
-          echo "Install dependencies"
-          npm ci
           echo "Stop pm2 app for clean build"
           pm2 stop "$PM2_APP_NAME" || true
+          echo "Clean previous build (for fresh Turbopack)"
+          sudo -n rm -rf .next 2>/dev/null || rm -rf .next 2>/dev/null || {
+            echo "Cannot full clean .next, removing build cache instead"
+            rm -rf .next/turbopack .next/server .next/static .next/BUILD_ID .next/prerender* .next/routes* .next/required* 2>/dev/null || true
+          }
+          echo "Free disk:"
+          df -h . || true
+          echo "Install dependencies"
+          npm ci
           echo "Build app"
           NODE_OPTIONS="--max-old-space-size=384" npm run build
           echo "Start pm2 app: $PM2_APP_NAME"
