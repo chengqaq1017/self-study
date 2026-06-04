@@ -92,9 +92,9 @@ jobs:
 
           echo "=== Activate uploaded bundle ==="
           test -f .upload/server.js
-          css_file=$(find .upload/.next/static/chunks -maxdepth 1 -name '*.css' -print -quit)
-          test -n "$css_file"
-          echo "CSS bundle: $css_file"
+          css_file=\$(find .upload/.next/static/chunks -maxdepth 1 -name '*.css' -print -quit)
+          test -n "\$css_file"
+          echo "CSS bundle: \$css_file"
           grep -r "2026027939" .upload/.next/ >/dev/null && echo "ICP: OK" || { echo "ICP: MISSING"; exit 1; }
           find . -mindepth 1 -maxdepth 1 \
             ! -name ".upload" \
@@ -110,7 +110,7 @@ jobs:
           pm2 delete "$PM2_APP_NAME" || true
           PORT="\${PORT:-3000}" HOSTNAME="\${HOSTNAME:-0.0.0.0}" pm2 start server.js --name "$PM2_APP_NAME"
           sleep 3
-          css_name=$(basename "$css_file")
-          curl -fsI "http://127.0.0.1:\${PORT:-3000}/_next/static/chunks/$css_name"
+          css_name=\$(basename "\$css_file")
+          curl -fsI "http://127.0.0.1:\${PORT:-3000}/_next/static/chunks/\$css_name"
           pm2 save || true
           EOF
