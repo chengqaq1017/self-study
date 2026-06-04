@@ -72,4 +72,17 @@ jobs:
           npm run build
           echo "Start pm2 app: $PM2_APP_NAME"
           pm2 start "$PM2_APP_NAME"
+          echo ""
+          echo "=== Diagnostic: verify deployment ==="
+          echo "PM2 process info:"
+          pm2 show "$PM2_APP_NAME" 2>/dev/null || pm2 list
+          echo ""
+          echo "Server git log (last 3):"
+          git log --oneline -3 2>/dev/null || echo "Not a git repo or no git available"
+          echo ""
+          echo "Check if ICP备案号 exists in built output:"
+          grep -r "2026027939" .next/server/app/ 2>/dev/null || echo "ICP备案号 NOT FOUND in build output"
+          echo ""
+          echo "Check footer in built HTML:"
+          grep -o "仅供学习交流使用" .next/server/app/page.html 2>/dev/null || echo "Footer not found in built page"
           EOF
