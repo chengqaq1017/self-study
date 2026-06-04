@@ -67,7 +67,7 @@ jobs:
           echo "Stop pm2 app for clean build"
           pm2 stop "$PM2_APP_NAME" || true
           echo "Clean previous build"
-          rm -rf .next
+          sudo rm -rf .next 2>/dev/null || rm -rf .next 2>/dev/null || true
           echo "Build app"
           npm run build
           echo "Start pm2 app: $PM2_APP_NAME"
