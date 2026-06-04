@@ -41,8 +41,8 @@ jobs:
           AUTH_SECRET: ${{ secrets.AUTH_SECRET || 'build-time-placeholder-secret' }}
           AUTH_URL: ${{ secrets.AUTH_URL || 'http://localhost:3000' }}
           AUTH_TRUST_HOST: "true"
-          MAX_FILE_SIZE_MB: ${{ secrets.MAX_FILE_SIZE_MB || '50' }}
-          NEXT_PUBLIC_MAX_FILE_SIZE_MB: ${{ secrets.NEXT_PUBLIC_MAX_FILE_SIZE_MB || '50' }}
+          MAX_FILE_SIZE_MB: ${{ secrets.MAX_FILE_SIZE_MB || '100' }}
+          NEXT_PUBLIC_MAX_FILE_SIZE_MB: ${{ secrets.NEXT_PUBLIC_MAX_FILE_SIZE_MB || '100' }}
         run: |
           npm ci
           npm run build
@@ -115,7 +115,7 @@ jobs:
           sudo fuser -k 3000/tcp 2>/dev/null || true
           sudo fuser -k 3001/tcp 2>/dev/null || true
           sleep 3
-          PORT=3000 NEXT_INTERNAL_PORT=3001 BIND_HOST="0.0.0.0" pm2 start standalone-server.cjs --name "$PM2_APP_NAME" --update-env
+          PORT=3000 NEXT_INTERNAL_PORT=3001 BIND_HOST="0.0.0.0" MAX_HEAP_MB=512 DB_POOL_MAX=5 pm2 start standalone-server.cjs --name "$PM2_APP_NAME" --update-env
           sleep 6
           pm2 status
           pm2 logs "$PM2_APP_NAME" --lines 30 --nostream || true

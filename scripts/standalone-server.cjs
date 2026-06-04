@@ -13,7 +13,7 @@ const internalPort = Number.parseInt(
   10,
 );
 const hostname = process.env.BIND_HOST || "0.0.0.0";
-const maxHeapMB = Number.parseInt(process.env.MAX_HEAP_MB || "256", 10);
+const maxHeapMB = Number.parseInt(process.env.MAX_HEAP_MB || "512", 10);
 
 const child = spawn(process.execPath, [`--max-old-space-size=${maxHeapMB}`, "server.js"], {
   cwd: root,
