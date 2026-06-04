@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     env:
       SERVER_HOST: ${{ secrets.SERVER_HOST }}
@@ -22,6 +22,11 @@ jobs:
     steps:
       - name: Checkout latest code
         uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - name: Validate deploy secrets
         run: |
@@ -39,7 +44,7 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -T 15 -p "$SERVER_PORT" -H "$SERVER_HOST" >> ~/.ssh/known_hosts
 
-      - name: Sync files to server
+      - name: Sync source files to server
         run: |
           rsync -az --delete \
             -e "ssh -i ~/.ssh/deploy_key -p $SERVER_PORT" \
@@ -51,31 +56,38 @@ jobs:
             --exclude "storage" \
             ./ "$SERVER_USER@$SERVER_HOST:$SERVER_PATH/"
 
-      - name: Build and restart
+      - name: Install dependencies on server
         run: |
           ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" \
             -o ServerAliveInterval=30 \
-            -o ServerAliveCountMax=6 \
             "$SERVER_USER@$SERVER_HOST" << EOF
           set -e
           cd "$SERVER_PATH"
-          echo "Node: \$(node -v)"
-          echo "npm: \$(npm -v)"
-          echo "pm2: \$(command -v pm2 || true)"
-          echo "Free memory:"
-          free -h || true
-          echo "Stop pm2 app for clean build"
-          pm2 stop "$PM2_APP_NAME" || true
-          echo "Clean Turbopack cache"
-          rm -rf .next/turbopack .next/server .next/static .next/BUILD_ID .next/prerender* .next/routes* .next/required-server-files.json 2>/dev/null || true
-          df -h . || true
-          echo "Install dependencies"
           NODE_OPTIONS="--max-old-space-size=384" npm ci
-          echo "Build app"
-          NODE_OPTIONS="--max-old-space-size=384" npm run build
-          echo "Start pm2 app: $PM2_APP_NAME"
-          pm2 start "$PM2_APP_NAME"
-          echo ""
-          echo "=== Verify build ==="
-          grep -r "2026027939" .next/server/app/ 2>/dev/null && echo "ICP备案号: OK" || echo "WARNING: ICP备案号 NOT FOUND"
+          EOF
+
+      - name: Build app (on GitHub Actions)
+        run: npm run build
+        env:
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+          AUTH_SECRET: dummy-build-secret
+
+      - name: Verify build
+        run: grep -r "2026027939" .next/server/app/ && echo "ICP备案号: OK"
+
+      - name: Deploy .next to server
+        run: |
+          rsync -az --delete \
+            -e "ssh -i ~/.ssh/deploy_key -p $SERVER_PORT" \
+            .next/ "$SERVER_USER@$SERVER_HOST:$SERVER_PATH/.next/"
+
+      - name: Restart app
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" \
+            -o ServerAliveInterval=30 \
+            "$SERVER_USER@$SERVER_HOST" << EOF
+          set -e
+          cd "$SERVER_PATH"
+          pm2 restart "$PM2_APP_NAME"
+          echo "Deploy done"
           EOF
