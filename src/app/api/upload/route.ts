@@ -35,7 +35,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "不支持的文件类型" }, { status: 400 });
     }
 
-    if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+    // 浏览器对 .7z/.rar/.doc 等格式可能返回空 MIME，扩展名校验已足够
+    if (file.type && !ALLOWED_MIME_TYPES.includes(file.type)) {
       return NextResponse.json({ error: "不支持的 MIME 类型" }, { status: 400 });
     }
 
