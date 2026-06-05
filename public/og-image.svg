@@ -23,7 +23,7 @@
     <path d="M896 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
     <path d="M992 54V534" stroke="#0B4F8A" stroke-opacity=".12"/>
   </g>
-  <rect x="76" y="72" width="1048" height="486" rx="32" fill="white" fill-opacity=".82" stroke="white" stroke-width="2"/>
+  <rect x="76" y="72" width="1048" height="486" rx="32" fill="#0B4F8A" fill-opacity=".82" stroke="#0B4F8A" stroke-width="2"/>
   <rect x="116" y="110" width="86" height="86" rx="18" fill="#0B4F8A"/>
   <path d="M137 158C150 140 167 132 186 132C181 149 166 164 137 178V158Z" fill="#86F2E8"/>
   <path d="M137 178C160 173 180 165 195 150C191 177 170 190 137 190V178Z" fill="#0B4F8A"/>
