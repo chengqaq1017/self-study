@@ -5,7 +5,6 @@ import { COLLEGE_NAME } from "@/lib/colleges";
 import {
   BookOpen,
   ClipboardCheck,
-  Compass,
   Download,
   FileStack,
   GraduationCap,
@@ -26,28 +25,18 @@ export default async function Home() {
       <section className="surface subtle-grid overflow-hidden rounded-lg">
         <div className="grid gap-6 p-4 sm:gap-8 sm:p-8 lg:grid-cols-[1.08fr_0.92fr] lg:p-10">
           <div>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3">
               <Image
                 src="/whut-logo.svg"
                 alt="武汉理工大学"
                 width={180}
                 height={50}
-                className="h-10 w-auto"
+                className="h-9 w-auto sm:h-10"
                 priority
               />
-              <Image
-                src="/naoep-logo.png"
-                alt="船海与能源动力工程学院"
-                width={210}
-                height={48}
-                className="h-10 w-auto object-contain"
-                priority
-              />
-            </div>
-
-            <div className="mt-7 inline-flex max-w-full items-center gap-2 rounded-full border border-primary/15 bg-white/75 px-3 py-1 text-xs font-medium text-primary">
-              <Compass className="h-3.5 w-3.5" />
-              <span className="truncate">船海与能源动力工程学院课程资料导航</span>
+              <span className="text-sm font-medium text-primary/70 sm:text-base">
+                船海与能源动力工程学院
+              </span>
             </div>
 
             <h1 className="mt-5 max-w-3xl text-2xl font-bold leading-tight text-ink sm:text-5xl">

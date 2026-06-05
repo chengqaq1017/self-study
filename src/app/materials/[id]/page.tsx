@@ -3,6 +3,7 @@ import { Calendar, Download, FileText, User } from "lucide-react";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { DownloadButton } from "@/components/materials/DownloadButton";
+import { DeleteMaterialButton } from "@/components/materials/DeleteMaterialButton";
 
 export default async function MaterialDetailPage({
   params,
@@ -99,9 +100,16 @@ export default async function MaterialDetailPage({
           </span>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           {(material.status === "APPROVED" || isOwner || isAdmin) && (
             <DownloadButton materialId={material.id} fileName={material.fileName} />
+          )}
+          {(isOwner || isAdmin) && (
+            <DeleteMaterialButton
+              materialId={material.id}
+              materialTitle={material.title}
+              variant="button"
+            />
           )}
           {material.status !== "APPROVED" && !isOwner && !isAdmin && (
             <p className="text-sm text-gray-400">该资料尚未通过审核</p>

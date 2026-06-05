@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { DeleteMaterialButton } from "@/components/materials/DeleteMaterialButton";
 
 export default async function AdminMaterialsPage() {
   const materials = await prisma.material.findMany({
@@ -56,6 +57,9 @@ export default async function AdminMaterialsPage() {
                 <span>{new Intl.DateTimeFormat("zh-CN").format(m.createdAt)}</span>
               </div>
             </div>
+            <div className="mt-3 flex justify-end">
+              <DeleteMaterialButton materialId={m.id} materialTitle={m.title} />
+            </div>
           </div>
         ))}
       </div>
@@ -70,6 +74,7 @@ export default async function AdminMaterialsPage() {
               <th className="px-4 py-3">状态</th>
               <th className="px-4 py-3">下载</th>
               <th className="px-4 py-3">时间</th>
+              <th className="px-4 py-3">操作</th>
             </tr>
           </thead>
           <tbody className="divide-y">
@@ -107,6 +112,9 @@ export default async function AdminMaterialsPage() {
                 <td className="px-4 py-3 text-gray-400">{m.downloadCount}</td>
                 <td className="px-4 py-3 text-gray-400">
                   {new Intl.DateTimeFormat("zh-CN").format(m.createdAt)}
+                </td>
+                <td className="px-4 py-3">
+                  <DeleteMaterialButton materialId={m.id} materialTitle={m.title} />
                 </td>
               </tr>
             ))}
