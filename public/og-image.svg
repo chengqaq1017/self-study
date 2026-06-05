@@ -26,7 +26,7 @@
   <rect x="76" y="72" width="1048" height="486" rx="32" fill="white" fill-opacity=".82" stroke="white" stroke-width="2"/>
   <rect x="116" y="110" width="86" height="86" rx="18" fill="#0B4F8A"/>
   <path d="M137 158C150 140 167 132 186 132C181 149 166 164 137 178V158Z" fill="#86F2E8"/>
-  <path d="M137 178C160 173 180 165 195 150C191 177 170 190 137 190V178Z" fill="white"/>
+  <path d="M137 178C160 173 180 165 195 150C191 177 170 190 137 190V178Z" fill="#0B4F8A"/>
   <text x="228" y="145" fill="#0B4F8A" font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif" font-size="30" font-weight="700">武汉理工大学</text>
   <text x="228" y="185" fill="#64748B" font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif" font-size="24">船海与能源动力工程学院</text>
   <text x="116" y="304" fill="#102033" font-family="Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif" font-size="70" font-weight="800">船海能动资料共享平台</text>
