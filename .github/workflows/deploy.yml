@@ -108,6 +108,12 @@ jobs:
           cp -a .upload/. .
           rm -rf .upload
 
+          echo "=== Ensure storage directories are writable ==="
+          mkdir -p storage/uploads storage/materials
+          sudo chown -R $(whoami):$(id -gn) storage
+          chmod -R 755 storage
+          echo "Storage owner: $(stat -c '%U:%G' storage)"
+
           echo "=== Ensure Nginx allows large uploads ==="
           echo "client_max_body_size 100m;" | sudo tee /etc/nginx/conf.d/upload-size.conf
           sudo nginx -t && sudo systemctl reload nginx
