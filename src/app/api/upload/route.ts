@@ -16,6 +16,14 @@ export async function POST(request: Request) {
   }
 
   try {
+    const contentType = request.headers.get("content-type") ?? "";
+    if (!contentType.includes("multipart/form-data")) {
+      return NextResponse.json(
+        { error: `POST body 不是 multipart/form-data（收到: ${contentType || "无"}）` },
+        { status: 400 },
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get("file");
 
@@ -45,7 +53,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json(metadata, { status: 201 });
   } catch (error) {
-    console.error("Upload error:", error);
-    return NextResponse.json({ error: "文件上传失败" }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Upload error:", message);
+    return NextResponse.json({ error: `文件上传失败：${message}` }, { status: 500 });
   }
 }
