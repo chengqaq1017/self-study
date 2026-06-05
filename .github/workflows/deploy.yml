@@ -109,10 +109,13 @@ jobs:
           rm -rf .upload
 
           echo "=== Ensure storage directories are writable ==="
-          mkdir -p storage/uploads storage/materials
-          sudo chown -R $(whoami):$(id -gn) storage
-          chmod -R 755 storage
-          echo "Storage owner: $(stat -c '%U:%G' storage)"
+          set -a && source .env 2>/dev/null || true && set +a
+          for d in "\${STORAGE_ROOT:-storage}" storage; do
+            sudo mkdir -p "\$d"/uploads "\$d"/materials
+            sudo chown -R \$(whoami):\$(id -gn) "\$d"
+            sudo chmod -R 755 "\$d"
+            echo "Storage dir '\$d' owner: \$(stat -c '%U:%G' "\$d")"
+          done
 
           echo "=== Ensure Nginx allows large uploads ==="
           echo "client_max_body_size 100m;" | sudo tee /etc/nginx/conf.d/upload-size.conf
