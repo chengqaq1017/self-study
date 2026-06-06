@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Users, FileText, Clock, CheckCircle, XCircle, Download } from "lucide-react";
+import { Users, FileText, Clock, CheckCircle, XCircle, Download, BookOpen, ClipboardCheck, FileStack } from "lucide-react";
 
 export default async function AdminDashboardPage() {
   const [
@@ -9,6 +9,7 @@ export default async function AdminDashboardPage() {
     approvedCount,
     rejectedCount,
     totalDownloads,
+    subjectCount,
   ] = await Promise.all([
     prisma.user.count(),
     prisma.material.count(),
@@ -16,6 +17,7 @@ export default async function AdminDashboardPage() {
     prisma.material.count({ where: { status: "APPROVED" } }),
     prisma.material.count({ where: { status: "REJECTED" } }),
     prisma.downloadLog.count(),
+    prisma.subject.count(),
   ]);
 
   const stats = [
@@ -45,6 +47,59 @@ export default async function AdminDashboardPage() {
             </p>
           </div>
         ))}
+      </div>
+
+      {/* 资料流转面板 */}
+      <div className="admin-flow-panel relative overflow-hidden rounded-lg border bg-white p-5 shadow-sm sm:p-6">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-medium text-slate-400">Study Hub</p>
+            <p className="mt-1 text-xl font-bold text-ink">资料流转面板</p>
+          </div>
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+            <FileStack className="h-5 w-5 text-primary" />
+          </div>
+        </div>
+
+        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+            <div className="flex items-center gap-1.5 text-2xl font-bold text-ink">
+              <BookOpen className="h-5 w-5 text-primary" />
+              {subjectCount}
+            </div>
+            <p className="mt-1 text-xs text-slate-500">课程</p>
+          </div>
+          <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+            <div className="flex items-center gap-1.5 text-2xl font-bold text-ink">
+              <Download className="h-5 w-5 text-accent" />
+              {totalMaterials}
+            </div>
+            <p className="mt-1 text-xs text-slate-500">资料</p>
+          </div>
+          <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+            <div className="flex items-center gap-1.5 text-2xl font-bold text-ink">
+              <Users className="h-5 w-5 text-purple-600" />
+              {totalUsers}
+            </div>
+            <p className="mt-1 text-xs text-slate-500">用户</p>
+          </div>
+        </div>
+
+        <div className="mt-5 space-y-2.5 text-sm">
+          {[
+            ["课程匹配", "按培养方案归档"],
+            ["资料审核", "管理员审核后公开"],
+            ["检索下载", "按关键词和年份查找"],
+          ].map(([title, body]) => (
+            <div key={title} className="flex items-center gap-3 rounded-md border border-slate-100 bg-slate-50/70 px-3 py-2">
+              <ClipboardCheck className="h-4 w-4 flex-shrink-0 text-primary/60" />
+              <div>
+                <p className="font-medium text-ink">{title}</p>
+                <p className="text-xs text-slate-500">{body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
